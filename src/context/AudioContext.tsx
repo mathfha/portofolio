@@ -173,13 +173,13 @@ export function AudioProvider({
       {/* ─────────────────────────────────────────────────────────────
           FULLSCREEN INTRO OVERLAY (Beat-responsive Name + Progress Bar)
           ───────────────────────────────────────────────────────────── */}
-      <AnimatePresence>
-        {isIntroVisible && (
+      <AnimatePresence mode="wait">
+        {isIntroVisible ? (
           <motion.div
             key="intro-screen"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.65, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             onClick={playAudio}
             onTouchStart={playAudio}
             className="fixed inset-0 z-[99999] flex flex-col items-center justify-between p-6 sm:p-12 text-white select-none overflow-hidden font-mono cursor-pointer"
@@ -229,14 +229,6 @@ export function AudioProvider({
                     />
                   ))}
                 </div>
-
-                {/* Song Title Pill */}
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 backdrop-blur-md shadow-lg">
-                  <Disc3 className={`w-4 h-4 text-white ${isPlaying ? "animate-spin" : ""}`} />
-                  <span className="font-semibold truncate max-w-xs sm:max-w-md">
-                    Too Many Nights (feat. Don Toliver) - Metro Boomin
-                  </span>
-                </div>
               </div>
             </div>
 
@@ -250,13 +242,18 @@ export function AudioProvider({
               </div>
             </div>
           </motion.div>
+        ) : (
+          <motion.div
+            key="main-portfolio"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="flex-1 flex flex-col w-full h-full min-h-screen"
+          >
+            {children}
+          </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Main Page Content */}
-      <div className="flex-1 flex flex-col w-full h-full min-h-screen">
-        {children}
-      </div>
     </AudioContext.Provider>
   );
 }

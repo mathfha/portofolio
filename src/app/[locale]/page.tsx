@@ -24,6 +24,7 @@ import {
   X,
 } from "lucide-react";
 import CERTIFICATES from "@/../data/certifications.json";
+import POSTS from "@/../data/posts.json";
 import {
   LinuxIcon,
   DockerIcon,
@@ -252,8 +253,8 @@ export default function StructuredBentoPortfolioPage({
 
               <p className="text-text-muted text-xs sm:text-sm leading-relaxed font-mono max-w-sm text-center mx-auto pt-0.5">
                 {locale === "id"
-                  ? "Mahasiswa & cybersecurity enthusiast. Fokus di web development, Linux server hardening, dan analisa vulnerability aplikasi."
-                  : "Computer science student & cybersecurity enthusiast. Focused on web development, Linux server hardening, and vulnerability assessments."}
+                  ? "Mahasiswa Sistem Informasi & cybersecurity enthusiast. Fokus di web development, Linux server hardening, dan analisa vulnerability aplikasi."
+                  : "Information system student & cybersecurity enthusiast. Focused on web development, Linux server hardening, and vulnerability assessments."}
               </p>
             </div>
 
@@ -483,39 +484,49 @@ export default function StructuredBentoPortfolioPage({
 
               {/* ── CARD 5: POST (Borderless & Prominent Title) ── */}
               <div id="post" className="scroll-mt-6 p-5 sm:p-7 sm:p-9 rounded-sm bg-surface hover:bg-surface-subtle transition-colors space-y-5 shadow-sm">
-                <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
-                  POST
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
+                    POST
+                  </h2>
+                  <span className="font-mono text-xs text-text-dim">{POSTS.length} Articles</span>
+                </div>
 
-                {/* Highlight Card */}
-                <Link
-                  href={`/${locale}/post/memecahkan-aes-ecb`}
-                  className="group block p-5 sm:p-6 rounded-sm bg-base/80 hover:bg-base transition-all space-y-3 shadow-sm"
-                >
-                  <div className="flex items-center justify-between font-mono text-xs text-text-dim">
-                    <span className="text-text font-bold">KRIPTOGRAFI · PYTHON</span>
-                    <span className="text-[11px]">4 min read</span>
-                  </div>
+                {/* Draggable & Auto-scrolling Post Stream (Smooth Horizontal Marquee) */}
+                <DraggableMarquee speed={0.5} direction="left">
+                  {POSTS.concat(POSTS).map((post, idx) => (
+                    <Link
+                      key={`${post.slug}-${idx}`}
+                      href={`/${locale}/post/${post.slug}`}
+                      className="group flex flex-col justify-between text-left bg-base/80 hover:bg-base p-4 sm:p-5 rounded-sm transition-all w-80 sm:w-96 min-h-[210px] shrink-0 cursor-pointer select-none shadow-sm border border-transparent hover:border-white/10"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between font-mono text-[10px] text-text-dim">
+                          <span className="text-text font-bold uppercase tracking-wider truncate max-w-[200px]">
+                            {post.category}
+                          </span>
+                          <span className="text-[10px] shrink-0">{post.readTime}</span>
+                        </div>
 
-                  <div className="space-y-1.5">
-                    <h3 className="font-heading text-lg sm:text-xl font-bold text-text group-hover:text-accent transition-colors flex items-center justify-between gap-2">
-                      <span>Memecahkan AES ECB → Blok demi Blok</span>
-                      <ArrowUpRight className="w-4 h-4 text-text-dim group-hover:text-accent shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </h3>
-                    <p className="text-xs text-text-muted font-mono leading-relaxed line-clamp-3">
-                      {locale === "id"
-                        ? "Analisis cara kerja Advanced Encryption Standard (AES) pada mode Electronic Codebook (ECB). Membedah mekanisme padding PKCS#7, potongan blok 16 byte, implementasi Python pycryptodome, dan alasan fatal bocornya pola ciphertext."
-                        : "Analysis of the Advanced Encryption Standard (AES) in Electronic Codebook (ECB) mode. Dissecting PKCS#7 padding, 16-byte block division, Python pycryptodome implementation, and why ciphertext pattern leaks occur."}
-                    </p>
-                  </div>
+                        <div className="space-y-1.5">
+                          <h3 className="font-heading text-sm sm:text-base font-bold text-text group-hover:text-accent transition-colors flex items-center justify-between gap-2 leading-snug">
+                            <span className="line-clamp-2">{post.title}</span>
+                            <ArrowUpRight className="w-4 h-4 text-text-dim group-hover:text-accent shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          </h3>
+                          <p className="text-[11px] sm:text-xs text-text-muted font-mono leading-relaxed line-clamp-3">
+                            {post.summary}
+                          </p>
+                        </div>
+                      </div>
 
-                  <div className="flex items-center gap-2 pt-1 font-mono text-xs text-text">
-                    <span className="group-hover:underline font-bold">
-                      {locale === "id" ? "Detail" : "Details"}
-                    </span>
-                    <span className="transition-transform group-hover:translate-x-1">→</span>
-                  </div>
-                </Link>
+                      <div className="flex items-center gap-2 pt-3 font-mono text-xs text-text border-t border-white/5 mt-3">
+                        <span className="group-hover:underline font-bold text-[11px]">
+                          {locale === "id" ? "Baca Selengkapnya" : "Read Full Post"}
+                        </span>
+                        <span className="transition-transform group-hover:translate-x-1">→</span>
+                      </div>
+                    </Link>
+                  ))}
+                </DraggableMarquee>
               </div>
             </section>
 

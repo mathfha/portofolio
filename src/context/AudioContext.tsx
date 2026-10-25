@@ -202,18 +202,19 @@ export function AudioProvider({
           <motion.div
             key="intro-screen"
             initial={{ y: 0, opacity: 1 }}
-            exit={{ y: "-100%", opacity: 0 }}
-            transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ y: "-100%" }}
+            transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
             onClick={startAudio}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-between p-6 sm:p-12 bg-black text-white select-none overflow-hidden font-mono cursor-pointer"
+            className="fixed inset-0 z-[99999] flex flex-col items-center justify-between p-6 sm:p-12 text-white select-none overflow-hidden font-mono cursor-pointer"
+            style={{ backgroundColor: "#000000" }}
           >
             {/* Ambient Background Radial Beat Glow */}
             <div
               className="absolute inset-0 pointer-events-none transition-opacity duration-150"
               style={{
                 background: `radial-gradient(circle at center, rgba(255, 255, 255, ${
-                  (beatScale - 1) * 0.45 + 0.05
-                }) 0%, transparent 70%)`,
+                  (beatScale - 1) * 0.35 + 0.05
+                }) 0%, transparent 65%)`,
               }}
             />
 
@@ -227,20 +228,19 @@ export function AudioProvider({
                 <motion.div
                   animate={{
                     scale: beatScale,
-                    letterSpacing: `${(beatScale - 1) * 0.35 + 0.04}em`,
+                    letterSpacing: `${(beatScale - 1) * 0.25 + 0.08}em`,
                   }}
-                  whileHover={{ scale: beatScale * 1.08 }}
                   transition={{ type: "spring", stiffness: 420, damping: 24 }}
-                  className="relative text-5xl sm:text-7xl md:text-8xl font-black text-white tracking-wider drop-shadow-2xl cursor-default"
+                  className="relative text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-widest drop-shadow-2xl cursor-default"
                   style={{
-                    textShadow: `0 0 ${Math.round((beatScale - 1) * 36)}px rgba(255, 255, 255, 0.95)`,
+                    textShadow: `0 0 ${Math.round((beatScale - 1) * 32)}px rgba(255, 255, 255, 0.9)`,
                   }}
                 >
                   ADITYA RAHMAN
                 </motion.div>
 
                 {/* Equalizer Frequency Bars Visualizer */}
-                <div className="flex items-end justify-center gap-1.5 h-16 sm:h-20 w-72 sm:w-96 px-4">
+                <div className="flex items-end justify-center gap-1.5 h-14 sm:h-18 w-64 sm:w-80 px-4">
                   {visualizerData.map((val, idx) => (
                     <motion.div
                       key={idx}
@@ -255,7 +255,7 @@ export function AudioProvider({
                 </div>
 
                 {/* Song Title Pill */}
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs text-neutral-300 backdrop-blur-md">
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300 backdrop-blur-md shadow-lg">
                   <Disc3 className={`w-4 h-4 text-white ${isPlaying ? "animate-spin" : ""}`} />
                   <span className="font-semibold truncate max-w-xs sm:max-w-md">
                     Too Many Nights (feat. Don Toliver) - Metro Boomin
@@ -281,8 +281,15 @@ export function AudioProvider({
         )}
       </AnimatePresence>
 
-      {/* Main Page Content */}
-      {children}
+      {/* Main Page Content - Smoothly reveals as intro finishes */}
+      <motion.div
+        initial={isHome ? { opacity: 0 } : { opacity: 1 }}
+        animate={{ opacity: isIntroVisible ? 0 : 1 }}
+        transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
+        className="flex-1 flex flex-col w-full h-full min-h-screen"
+      >
+        {children}
+      </motion.div>
     </AudioContext.Provider>
   );
 }

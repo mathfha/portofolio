@@ -203,13 +203,13 @@ export default function StructuredBentoPortfolioPage({
           <section className="lg:col-span-5 flex flex-col items-center justify-center text-center space-y-4 w-full lg:h-full shrink-0">
             <div className="space-y-3 w-full flex flex-col items-center justify-center">
               <h1 className="font-heading font-extrabold tracking-tight text-text leading-tight text-center w-full mx-auto flex flex-col items-center">
-                <span className="block text-2xl sm:text-3xl md:text-4xl xl:text-5xl whitespace-nowrap">
+                <span className="block text-xl sm:text-2xl md:text-3xl lg:text-[1.65rem] xl:text-[1.95rem] whitespace-nowrap">
                   Web Developer
                 </span>
-                <span className="block text-xl sm:text-2xl md:text-3xl text-text-muted font-normal py-1 font-mono">
+                <span className="block text-base sm:text-lg lg:text-xl text-text-muted font-normal py-0.5 font-mono">
                   &amp;
                 </span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl xl:text-5xl whitespace-nowrap">
+                <span className="block text-xl sm:text-2xl md:text-3xl lg:text-[1.65rem] xl:text-[1.95rem] whitespace-nowrap">
                   Security Enthusiast
                 </span>
               </h1>

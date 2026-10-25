@@ -36,6 +36,7 @@ export function AudioProvider({
   // Only run intro if initially landing on home page
   const [isIntroVisible, setIsIntroVisible] = useState(isHome);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const [beatScale, setBeatScale] = useState(1);
   const [visualizerData, setVisualizerData] = useState<number[]>(new Array(16).fill(16));
   const [progress, setProgress] = useState(0);
@@ -48,13 +49,17 @@ export function AudioProvider({
   const playAudio = () => {
     const audio = audioRef.current;
     if (!audio) return;
+    audio.volume = 1.0;
+    audio.muted = false;
     audio
       .play()
       .then(() => {
         setIsPlaying(true);
+        setAutoplayBlocked(false);
       })
       .catch(() => {
-        // Handled: Will play automatically on first user touch/click gesture
+        // Mobile browser policy blocked sound until first user gesture
+        setAutoplayBlocked(true);
       });
   };
 
@@ -63,13 +68,25 @@ export function AudioProvider({
     startTimeRef.current = Date.now();
     playAudio();
 
+    const audio = audioRef.current;
+    if (audio) {
+      audio.onplay = () => {
+        setIsPlaying(true);
+        setAutoplayBlocked(false);
+      };
+      audio.onpause = () => setIsPlaying(false);
+    }
+
     const unlockAudio = () => {
-      const audio = audioRef.current;
-      if (audio && audio.paused) {
-        audio
+      const el = audioRef.current;
+      if (el && el.paused) {
+        el.volume = 1.0;
+        el.muted = false;
+        el
           .play()
           .then(() => {
             setIsPlaying(true);
+            setAutoplayBlocked(false);
           })
           .catch(() => {});
       }
@@ -229,6 +246,13 @@ export function AudioProvider({
                     />
                   ))}
                 </div>
+
+                {/* Subtle Mobile Gesture Hint (only shown if mobile browser blocked audio) */}
+                {!isPlaying && autoplayBlocked && (
+                  <div className="text-[11px] text-text-dim tracking-widest uppercase animate-pulse pt-1">
+                    {locale === "en" ? "[ tap for sound ]" : "[ sentuh layar untuk suara ]"}
+                  </div>
+                )}
               </div>
             </div>
 

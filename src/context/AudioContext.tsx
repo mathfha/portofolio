@@ -41,80 +41,63 @@ export function AudioProvider({
   const [progress, setProgress] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(Date.now());
 
-  // Helper to start audio
-  const startAudio = async () => {
+  // Direct native audio player helper (no suspended WebAudio graph lock)
+  const playAudio = () => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    try {
-      if (!audioCtxRef.current) {
-        const AudioContextClass =
-          window.AudioContext ||
-          (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-        if (AudioContextClass) {
-          const ctx = new AudioContextClass();
-          const analyser = ctx.createAnalyser();
-          analyser.fftSize = 64;
-          analyser.smoothingTimeConstant = 0.8;
-
-          try {
-            const source = ctx.createMediaElementSource(audio);
-            source.connect(analyser);
-            analyser.connect(ctx.destination);
-            analyserRef.current = analyser;
-          } catch {}
-
-          audioCtxRef.current = ctx;
-        }
-      }
-
-      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-        await audioCtxRef.current.resume();
-      }
-
-      await audio.play();
-      setIsPlaying(true);
-    } catch {
-      // Browser gesture policy caught: will resume on first user interaction
-    }
+    audio
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch(() => {
+        // Handled: Will play automatically on first user touch/click gesture
+      });
   };
 
-  // Mount effect: auto-play audio and register gesture listener
+  // Mount effect: attempt auto-play immediately and register gesture unlock
   useEffect(() => {
     startTimeRef.current = Date.now();
-    startAudio();
+    playAudio();
 
-    const handleGesture = () => {
-      startAudio();
-      window.removeEventListener("pointerdown", handleGesture);
-      window.removeEventListener("keydown", handleGesture);
-      window.removeEventListener("touchstart", handleGesture);
-      window.removeEventListener("click", handleGesture);
+    const unlockAudio = () => {
+      const audio = audioRef.current;
+      if (audio && audio.paused) {
+        audio
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(() => {});
+      }
     };
 
-    window.addEventListener("pointerdown", handleGesture, { passive: true });
-    window.addEventListener("keydown", handleGesture, { passive: true });
-    window.addEventListener("touchstart", handleGesture, { passive: true });
-    window.addEventListener("click", handleGesture, { passive: true });
+    window.addEventListener("click", unlockAudio, { passive: true });
+    window.addEventListener("touchstart", unlockAudio, { passive: true });
+    window.addEventListener("touchend", unlockAudio, { passive: true });
+    window.addEventListener("pointerdown", unlockAudio, { passive: true });
+    window.addEventListener("keydown", unlockAudio, { passive: true });
+    window.addEventListener("scroll", unlockAudio, { passive: true });
 
     return () => {
-      window.removeEventListener("pointerdown", handleGesture);
-      window.removeEventListener("keydown", handleGesture);
-      window.removeEventListener("touchstart", handleGesture);
-      window.removeEventListener("click", handleGesture);
+      window.removeEventListener("click", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+      window.removeEventListener("touchend", unlockAudio);
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("scroll", unlockAudio);
     };
   }, []);
 
-  // 6.0s rhythm loop for intro before sliding to portfolio
+  // 6.0s rhythm loop tailored precisely to Metro Boomin - Too Many Nights (142 BPM)
   useEffect(() => {
     if (!isIntroVisible) return;
 
-    const dataArray = new Uint8Array(16);
+    const bpm = 142;
+    const beatInterval = 60000 / bpm; // ~422.5ms per beat
     const INTRO_DURATION_MS = 6000;
 
     const updateFrame = () => {
@@ -123,30 +106,22 @@ export function AudioProvider({
       const currentProgress = Math.min((elapsed / INTRO_DURATION_MS) * 100, 100);
       setProgress(currentProgress);
 
-      let bassEnergy = 0;
+      const beatPhase = (elapsed % beatInterval) / beatInterval;
+      // Exponential punchy kick attack & smooth decay
+      const kick = Math.pow(Math.max(0, 1 - beatPhase * 1.55), 2);
+      setBeatScale(1 + kick * 0.22);
+
       const bars: number[] = [];
-
-      if (analyserRef.current) {
-        analyserRef.current.getByteFrequencyData(dataArray);
-        const bassSum = dataArray[0] + dataArray[1] + dataArray[2] + dataArray[3];
-        bassEnergy = bassSum / (4 * 255);
-
-        for (let i = 0; i < 16; i++) {
-          bars.push(Math.max((dataArray[i] / 255) * 100, 15));
-        }
-      } else {
-        const bpm = 142;
-        const beatInterval = 60000 / bpm;
-        const phase = (elapsed % beatInterval) / beatInterval;
-        bassEnergy = Math.max(0, 1 - phase * 1.8);
-
-        for (let i = 0; i < 16; i++) {
-          const barPhase = ((elapsed + i * 40) % beatInterval) / beatInterval;
-          bars.push(16 + Math.sin(barPhase * Math.PI) * 75);
-        }
+      for (let i = 0; i < 16; i++) {
+        const offset = (i * 38) % beatInterval;
+        const phase = ((elapsed + offset) % beatInterval) / beatInterval;
+        const wave = Math.sin(phase * Math.PI);
+        const height =
+          i < 4
+            ? 25 + kick * 65 + wave * 10
+            : 18 + wave * 55 + kick * 25;
+        bars.push(Math.min(100, Math.max(14, height)));
       }
-
-      setBeatScale(1 + bassEnergy * 0.24);
       setVisualizerData(bars);
 
       if (currentProgress >= 100) {
@@ -169,10 +144,10 @@ export function AudioProvider({
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-        audioCtxRef.current.resume();
-      }
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
     }
   };
 
@@ -185,26 +160,28 @@ export function AudioProvider({
         visualizerData,
       }}
     >
-      {/* Global Persistent Audio Element */}
+      {/* Global Persistent Audio Element with native autoPlay */}
       <audio
         ref={audioRef}
         src="/audio/too-many-nights.mp3"
+        autoPlay
         preload="auto"
         loop
         playsInline
       />
 
       {/* ─────────────────────────────────────────────────────────────
-          FULLSCREEN INTRO OVERLAY (Beat-responsive Name + Auto-slide)
+          FULLSCREEN INTRO OVERLAY (Beat-responsive Name + Progress Bar)
           ───────────────────────────────────────────────────────────── */}
       <AnimatePresence>
         {isIntroVisible && (
           <motion.div
             key="intro-screen"
-            initial={{ y: 0, opacity: 1 }}
-            exit={{ y: "-100%" }}
-            transition={{ duration: 0.9, ease: [0.77, 0, 0.175, 1] }}
-            onClick={startAudio}
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.65, ease: [0.4, 0, 0.2, 1] }}
+            onClick={playAudio}
+            onTouchStart={playAudio}
             className="fixed inset-0 z-[99999] flex flex-col items-center justify-between p-6 sm:p-12 text-white select-none overflow-hidden font-mono cursor-pointer"
             style={{ backgroundColor: "#000000" }}
           >
@@ -242,12 +219,11 @@ export function AudioProvider({
                 {/* Equalizer Frequency Bars Visualizer */}
                 <div className="flex items-end justify-center gap-1.5 h-14 sm:h-18 w-64 sm:w-80 px-4">
                   {visualizerData.map((val, idx) => (
-                    <motion.div
+                    <div
                       key={idx}
-                      className="flex-1 bg-white rounded-t-sm"
-                      animate={{ height: `${val}%` }}
-                      transition={{ duration: 0.05, ease: "linear" }}
+                      className="flex-1 bg-white rounded-t-sm transition-all duration-75"
                       style={{
+                        height: `${val}%`,
                         opacity: 0.35 + (val / 100) * 0.65,
                       }}
                     />
@@ -264,15 +240,11 @@ export function AudioProvider({
               </div>
             </div>
 
-            {/* Bottom Progress Bar: 6.0s countdown before auto-sliding to portfolio */}
-            <div className="w-full max-w-md space-y-2 z-10 pb-4 text-center">
-              <div className="flex items-center justify-between text-[11px] text-neutral-400 font-mono">
-                <span>{locale === "en" ? "Entering Portfolio..." : "Menuju Portofolio..."}</span>
-                <span>{Math.round(progress)}%</span>
-              </div>
+            {/* Bottom Progress Bar: Minimalist & Clean (No text) */}
+            <div className="w-full max-w-xs sm:max-w-sm z-10 pb-8 px-4">
               <div className="w-full h-1 bg-neutral-900 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-white"
+                <div
+                  className="h-full bg-white transition-all duration-75 ease-linear"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -281,15 +253,10 @@ export function AudioProvider({
         )}
       </AnimatePresence>
 
-      {/* Main Page Content - Smoothly reveals as intro finishes */}
-      <motion.div
-        initial={isHome ? { opacity: 0 } : { opacity: 1 }}
-        animate={{ opacity: isIntroVisible ? 0 : 1 }}
-        transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
-        className="flex-1 flex flex-col w-full h-full min-h-screen"
-      >
+      {/* Main Page Content */}
+      <div className="flex-1 flex flex-col w-full h-full min-h-screen">
         {children}
-      </motion.div>
+      </div>
     </AudioContext.Provider>
   );
 }

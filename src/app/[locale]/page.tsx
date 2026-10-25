@@ -98,6 +98,37 @@ export default function StructuredBentoPortfolioPage({
   };
 
   useEffect(() => {
+    try {
+      sessionStorage.setItem("portfolio_navigated", "true");
+    } catch {}
+
+    const handleInitialHash = () => {
+      if (typeof window === "undefined") return;
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+
+      const timer = setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) {
+          if (window.innerWidth >= 1024 && rightColRef.current) {
+            rightColRef.current.scrollTo({
+              top: el.offsetTop - 12,
+              behavior: "smooth",
+            });
+          } else {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+          setActiveSection(hash);
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    };
+
+    handleInitialHash();
+  }, []);
+
+  useEffect(() => {
     const sectionIds = ["about", "skill", "experience", "certificate", "post"];
     const handleScroll = () => {
       const isDesktop = window.innerWidth >= 1024;
@@ -575,7 +606,8 @@ export default function StructuredBentoPortfolioPage({
               <span className="text-[11px] text-text-dim">{selectedCert.category}</span>
               <div className="flex items-center gap-2">
                 <Link
-                  href={`/certificate/${selectedCert.slug}`}
+                  href={`/${locale}/certificate/${selectedCert.slug}`}
+                  onClick={() => setSelectedCert(null)}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-sm bg-accent text-base font-bold hover:bg-accent-hover transition-colors text-xs"
                 >
                   <span>Detail Sertifikat</span>

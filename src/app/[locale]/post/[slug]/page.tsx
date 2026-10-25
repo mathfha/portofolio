@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Check, Copy, FileText, Sun, Moon, Terminal } from "lucide-react";
+import { Check, Copy, FileText, Sun, Moon, Terminal } from "lucide-react";
+import { BackButton } from "@/components/ui/BackButton";
 import { MusicToggleButton } from "@/context/AudioContext";
 import POSTS from "@/../data/posts.json";
 
@@ -15,6 +15,7 @@ interface PostPageProps {
 
 export default function PostArticlePage({ params }: PostPageProps) {
   const { slug } = params;
+  const safeLocale = params.locale === "en" ? "en" : "id";
   const post =
     POSTS.find((p) => p.slug === slug || p.aliases.includes(slug)) || POSTS[0];
 
@@ -44,14 +45,10 @@ export default function PostArticlePage({ params }: PostPageProps) {
       {/* Top Header Bar (.md viewer aesthetic - aligned with article width) */}
       <header className="sticky top-0 z-30 w-full px-4 sm:px-8 py-5 sm:py-6 bg-base/95 backdrop-blur-md border-b border-white/5 font-mono">
         <div className="max-w-4xl w-full mx-auto flex items-center justify-between">
-          <Link
-            href={`/${params.locale === "en" ? "en" : "id"}`}
-            className="inline-flex items-center gap-3 text-text hover:text-accent font-bold text-lg sm:text-xl transition-colors py-1.5 group"
-            title={params.locale === "en" ? "Back to Portfolio" : "Kembali ke Portofolio"}
-          >
-            <ArrowLeft className="w-6 h-6 transition-transform group-hover:-translate-x-1" />
-            <span>{params.locale === "en" ? "Back" : "Kembali"}</span>
-          </Link>
+          <BackButton
+            fallbackHref={`/${safeLocale}#post`}
+            label={safeLocale === "en" ? "Back" : "Kembali"}
+          />
 
           {/* Virtual File Path Badge */}
           <div className="hidden sm:flex items-center gap-2.5 px-4 py-1.5 rounded-sm bg-surface text-text-muted text-sm sm:text-base border border-white/10 font-medium">

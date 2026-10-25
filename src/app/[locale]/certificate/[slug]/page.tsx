@@ -1,7 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { BackButton } from "@/components/ui/BackButton";
 import { MusicToggleButton } from "@/context/AudioContext";
 import CERTIFICATES from "@/../data/certifications.json";
 
@@ -27,6 +26,7 @@ export default function CertificateDetailPage({
   params: { locale: string; slug: string };
 }) {
   const { locale, slug } = params;
+  const safeLocale = locale === "en" ? "en" : "id";
 
   const cert = CERTIFICATES.find(
     (c) => c.slug === slug || c.alias === slug || c.id === slug
@@ -40,13 +40,10 @@ export default function CertificateDetailPage({
     <div className="min-h-screen bg-base text-text selection:bg-accent selection:text-base flex flex-col justify-between">
       {/* Top Bar (Centered with max-w-4xl container) */}
       <header className="w-full max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8 flex items-center justify-between font-mono">
-        <Link
-          href={`/${locale}#certificate`}
-          className="inline-flex items-center gap-3 text-text hover:text-accent font-bold text-lg sm:text-xl transition-colors group py-1.5"
-        >
-          <ArrowLeft className="w-6 h-6 transition-transform group-hover:-translate-x-1.5" />
-          <span>{locale === "en" ? "Back" : "Kembali"}</span>
-        </Link>
+        <BackButton
+          fallbackHref={`/${safeLocale}#certificate`}
+          label={safeLocale === "en" ? "Back" : "Kembali"}
+        />
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2.5 text-text-muted text-sm sm:text-base font-semibold">

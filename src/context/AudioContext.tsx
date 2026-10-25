@@ -65,6 +65,13 @@ export function AudioProvider({
 
   // Mount effect: attempt auto-play immediately and register gesture unlock
   useEffect(() => {
+    try {
+      const hasSeenIntro = sessionStorage.getItem("portfolio_intro_seen");
+      if (hasSeenIntro === "true" && isIntroVisible) {
+        setIsIntroVisible(false);
+      }
+    } catch {}
+
     startTimeRef.current = Date.now();
     playAudio();
 
@@ -142,6 +149,9 @@ export function AudioProvider({
       setVisualizerData(bars);
 
       if (currentProgress >= 100) {
+        try {
+          sessionStorage.setItem("portfolio_intro_seen", "true");
+        } catch {}
         setIsIntroVisible(false);
       } else {
         animFrameRef.current = requestAnimationFrame(updateFrame);

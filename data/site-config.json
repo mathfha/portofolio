@@ -1,0 +1,29 @@
+{
+  "name": "Aditya Rahman",
+  "role": {
+    "id": "Web Developer & Security Engineer",
+    "en": "Web Developer & Security Engineer"
+  },
+  "tagline": {
+    "id": "Pengembang web & praktisi keamanan siber dengan spesialisasi pengembangan sistem web, pengerasan Linux, dan penetration testing.",
+    "en": "Web developer & cybersecurity practitioner specializing in web engineering, Linux systems hardening, and penetration testing."
+  },
+  "status": {
+    "type": "available",
+    "id": "Terbuka untuk Peluang Web Development & Keamanan Siber",
+    "en": "Open to Web Engineering & Cyber Security Opportunities"
+  },
+  "location": "Kalimantan Selatan, Indonesia",
+  "contact": {
+    "emailUser": "adit.rwet",
+    "emailDomain": "gmail.com",
+    "email": "adit.rwet@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/aditya-rahman-680938267/?isSelfProfile=true",
+    "github": "https://github.com/mathfha",
+    "instagram": "https://www.instagram.com/aditwastakenn/"
+  },
+  "cv": {
+    "enPath": "/assets/cv-aditya-rahman-en.pdf",
+    "idPath": "/assets/cv-aditya-rahman-en.pdf"
+  }
+}

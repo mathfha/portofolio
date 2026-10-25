@@ -1,0 +1,52 @@
+[
+  {
+    "id": "exp-1",
+    "company": "PT Inovasi Informatik Sinergi",
+    "role": {
+      "id": "Security Engineer",
+      "en": "Security Engineer"
+    },
+    "period": {
+      "start": "Jul 2026",
+      "end": "Oct 2026"
+    },
+    "type": "internship",
+    "highlights": {
+      "id": [
+        "Mitigasi ancaman keamanan siber, penanganan insiden, dan asesmen kerentanan sistem.",
+        "Konfigurasi system hardening, pengelolaan infrastruktur server, dan implementasi continuous monitoring.",
+        "Pengembangan sistem backup server andal dan otomatisasi alur deployment perangkat lunak."
+      ],
+      "en": [
+        "Mitigated cybersecurity threats, handled incident response, and performed vulnerability assessments.",
+        "Configured system hardening, managed server infrastructure, and deployed continuous monitoring solutions.",
+        "Engineered reliable backup systems and assisted in software deployment automation."
+      ]
+    }
+  },
+  {
+    "id": "exp-2",
+    "company": "Pentester.ID",
+    "role": {
+      "id": "Penetration Tester Intern",
+      "en": "Penetration Tester Intern"
+    },
+    "period": {
+      "start": "Dec 2021",
+      "end": "Sep 2023"
+    },
+    "type": "internship",
+    "highlights": {
+      "id": [
+        "Asesmen kerentanan menyeluruh, reconnaissance jaringan via Nmap, dan eksploitasi aplikasi web.",
+        "Pelaporan temuan celah keamanan secara terstruktur kepada pemangku kepentingan.",
+        "Penetrasi situs web, asesmen segmentasi jaringan, dan kolaborasi red team untuk mengeksploitasi kerentanan."
+      ],
+      "en": [
+        "Conducted comprehensive vulnerability assessments, network reconnaissance via Nmap, and web application exploitation.",
+        "Effectively reported discovered vulnerabilities and remediation paths to key stakeholders.",
+        "Performed website penetration testing, network segmentation audits, and collaborated with red teams."
+      ]
+    }
+  }
+]

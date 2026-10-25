@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark Mode: Pure Obsidian Black & Crisp White (Borderless) */
+  --base: #000000;
+  --surface: #0a0a0a;
+  --surface-subtle: #141414;
+  --border: transparent;
+  --border-hover: transparent;
+  --accent: #FFFFFF;
+  --accent-hover: #E5E5E5;
+  --sage: #FFFFFF;
+  --salmon: #FFFFFF;
+  --slate: #A3A3A3;
+  --text: #FFFFFF;
+  --text-muted: #A3A3A3;
+  --text-dim: #737373;
+  --topbar-bg: rgba(0, 0, 0, 0.92);
+}
+
+html.light {
+  /* Light Mode: Pure Crisp White & Obsidian Black (Borderless) */
+  --base: #F8F9FA;
+  --surface: #FFFFFF;
+  --surface-subtle: #F1F3F5;
+  --border: transparent;
+  --border-hover: transparent;
+  --accent: #000000;
+  --accent-hover: #262626;
+  --sage: #000000;
+  --salmon: #000000;
+  --slate: #525252;
+  --text: #000000;
+  --text-muted: #525252;
+  --text-dim: #737373;
+  --topbar-bg: rgba(255, 255, 255, 0.92);
+}
+
+@font-face {
+  font-family: 'Consolas';
+  src: local('Consolas'),
+       local('YaHei Consolas Hybrid'),
+       url('/fonts/consolas.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: Consolas, "YaHei Consolas Hybrid", "Courier New", Courier, monospace;
+}
+
+*, *::before, *::after, body, button, input, textarea, select, h1, h2, h3, h4, h5, h6, p, span, a, div {
+  font-family: Consolas, "YaHei Consolas Hybrid", "Courier New", Courier, monospace !important;
+}
+
+/* Background Grain Speckle */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Subtle grid line utility */
+.border-grid {
+  border-color: var(--border);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Infinite Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite reverse;
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+.mask-marquee {
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}

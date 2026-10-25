@@ -1,0 +1,117 @@
+[
+  {
+    "id": "kmipn-viii-juara-1",
+    "slug": "kmipn-viii-juara-1",
+    "alias": "cert1",
+    "title": "Juara 1 - Consistent Flag Seeker (Keamanan Siber)",
+    "issuer": "KMIPN VIII · Politeknik Negeri Ujung Pandang",
+    "date": "Sep 2026",
+    "category": "Competition Award",
+    "image": "/certificate/cert_2.png",
+    "team": "MakatXploit (Aditya Rahman, Rifki Al Ansyari, Hipni)",
+    "description": "Penghargaan Juara 1 tingkat nasional cabang lomba Keamanan Siber kategori Consistent Flag Seeker pada pagelaran KMIPN VIII di Makassar."
+  },
+  {
+    "id": "kmipn-vii-juara-1",
+    "slug": "kmipn-vii-juara-1",
+    "alias": "cert2",
+    "title": "Juara 1 - Write-Up Documentation (Keamanan Siber)",
+    "issuer": "KMIPN VII · Politeknik Negeri Padang",
+    "date": "Feb 2025",
+    "category": "Competition Award",
+    "image": "/certificate/cert_10.jpeg",
+    "team": "Makat-Xploit (Hipni, Rifki Al Ansyari, Aditya Rahman)",
+    "description": "Juara 1 nasional cabang Keamanan Siber kategori Write-Up Documentation pada KMIPN VII yang diselenggarakan di Politeknik Negeri Padang."
+  },
+  {
+    "id": "ec-council-ehe",
+    "slug": "ec-council-ehe",
+    "alias": "cert3",
+    "title": "Ethical Hacking Essentials (EHE)",
+    "issuer": "EC-Council",
+    "credentialId": "233795",
+    "date": "Jul 2023",
+    "category": "Professional License",
+    "image": "/certificate/cert_8.png",
+    "description": "Sertifikasi kompetensi global dari EC-Council yang memvalidasi dasar-dasar ethical hacking, mitigasi serangan jaringan, dan analisis kerentanan sistem."
+  },
+  {
+    "id": "itb-vulnerability-disclosure",
+    "slug": "itb-vulnerability-disclosure",
+    "alias": "cert4",
+    "title": "Bronze Award · Responsible Vulnerability Disclosure",
+    "issuer": "Direktorat TI Institut Teknologi Bandung (ITB)",
+    "date": "Apr 2024",
+    "category": "Security Recognition",
+    "image": "/certificate/cert_5.png",
+    "description": "Penghargaan apresiasi dari DTI ITB atas koordinasi temuan kerentanan sistem dan pelaporan celah keamanan secara etis (responsible disclosure)."
+  },
+  {
+    "id": "diskominfo-bug-hunter",
+    "slug": "diskominfo-bug-hunter",
+    "alias": "cert5",
+    "title": "Sertifikat Bug Hunter",
+    "issuer": "Diskominfo Kota Banjarmasin",
+    "date": "Jun 2023",
+    "category": "Security Recognition",
+    "image": "/certificate/cert_9.png",
+    "description": "Apresiasi pelaporan kerentanan keamanan pada portal resmi diskominfotik.banjarmasinkota.go.id kepada Dinas Komunikasi, Informatika dan Statistik Kota Banjarmasin."
+  },
+  {
+    "id": "kmipn-viii-finalis",
+    "slug": "kmipn-viii-finalis",
+    "alias": "cert6",
+    "title": "Finalis Nasional Keamanan Siber",
+    "issuer": "KMIPN VIII · Politeknik Negeri Ujung Pandang",
+    "date": "Sep 2026",
+    "category": "Competition Finalist",
+    "image": "/certificate/cert_1.png",
+    "description": "Sertifikat finalis babak utama Kompetisi Mahasiswa Informatika Politeknik Nasional (KMIPN) VIII bidang Keamanan Siber di Makassar."
+  },
+  {
+    "id": "its-nabu-cybersecurity",
+    "slug": "its-nabu-cybersecurity",
+    "alias": "cert7",
+    "title": "Hands-On Cyber Security Practice",
+    "issuer": "NETICS Lab · Institut Teknologi Sepuluh Nopember (ITS)",
+    "date": "Nov 2024",
+    "category": "Technical Training",
+    "image": "/certificate/cert_4.png",
+    "credentialId": "033244f6-f465-4575-81f8-e66d508a7b20",
+    "description": "Pelatihan intensif praktik keamanan siber di NETICS Lab (Networking Technology and Intelligent Cyber Security Laboratory) Departemen Informatika ITS Surabaya."
+  },
+  {
+    "id": "ipb-it-festival",
+    "slug": "ipb-it-festival",
+    "alias": "cert8",
+    "title": "Peserta IT Festival 2025",
+    "issuer": "Sekolah Vokasi · IPB University",
+    "date": "Agt 2025",
+    "category": "Competition Participant",
+    "image": "/certificate/cert_3.png",
+    "description": "Partisipasi pada kompetisi teknologi IT Festival 2025 yang diselenggarakan oleh Himavo Micro IT Sekolah Vokasi IPB University."
+  },
+  {
+    "id": "lks-smk-web-tech",
+    "slug": "lks-smk-web-tech",
+    "alias": "cert9",
+    "title": "Peserta LKS SMK Tingkat Provinsi (Web Technologies)",
+    "issuer": "Disdikbud Provinsi Kalimantan Selatan",
+    "date": "Jun 2023",
+    "category": "Competition Participant",
+    "image": "/certificate/cert_7.png",
+    "description": "Piagam penghargaan peserta Lomba Kompetensi Siswa (LKS) SMK Tingkat Provinsi Kalimantan Selatan untuk bidang lomba Web Technologies."
+  },
+  {
+    "id": "dicoding-logic",
+    "slug": "dicoding-logic",
+    "alias": "cert10",
+    "title": "Pengenalan ke Logika Pemrograman",
+    "issuer": "Dicoding Indonesia",
+    "credentialId": "JMZV1MV4JXN9",
+    "date": "Sep 2023",
+    "category": "Course Completion",
+    "image": "/certificate/cert_6.png",
+    "description": "Sertifikat kelulusan kelas dasar logika dan algoritma pemrograman dari platform Dicoding Indonesia."
+  }
+]

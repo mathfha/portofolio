@@ -1,0 +1,21 @@
+[
+  {
+    "institution": "Politeknik Negeri Banjarmasin",
+    "degree": {
+      "id": "D3 Sistem Informasi",
+      "en": "Associate's Degree in Information Systems"
+    },
+    "period": "Sep 2024 - Nov 2026",
+    "status": "ongoing"
+  },
+  {
+    "institution": "SMKN 1 Gambut",
+    "degree": {
+      "id": "SMK Multimedia",
+      "en": "High School Diploma in Multimedia"
+    },
+    "period": "May 2021 - Jun 2024",
+    "grade": "Score: 76.98",
+    "status": "graduated"
+  }
+]

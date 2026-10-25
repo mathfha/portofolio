@@ -1,0 +1,71 @@
+[
+  {
+    "slug": "inciro-incident-monitoring",
+    "title": {
+      "id": "Inciro - Platform Incident Response & Monitoring",
+      "en": "Inciro - Incident Response & Monitoring Platform"
+    },
+    "description": {
+      "id": "Sistem incident response dan continuous monitoring server untuk pelaporan cepat ancaman keamanan dan manajemen insiden per aplikasi.",
+      "en": "Incident response and continuous server monitoring system designed for threat triage, alerting, and per-app incident governance."
+    },
+    "tags": ["Security", "Laravel", "Docker", "Nginx", "Incident Response"],
+    "status": "completed",
+    "featured": true,
+    "role": "Security Engineer / Backend Developer",
+    "highlights": [
+      "Mitigasi insiden keamanan dan integrasi audit log terpusat.",
+      "Hardening infrastruktur server dan otomatisasi deployment kontainer Docker.",
+      "Arsitektur backup andal dan webhook ingestion untuk notifikasi darurat."
+    ],
+    "links": {
+      "repo": "https://github.com/genbucyber/inciro"
+    }
+  },
+  {
+    "slug": "kmipn-cybersecurity-writeups",
+    "title": {
+      "id": "KMIPN Champion Security Research & CTF Toolkit",
+      "en": "KMIPN Champion Security Research & CTF Toolkit"
+    },
+    "description": {
+      "id": "Riset keamanan siber dan dokumentasi write-up kompetisi nasional (Juara 1 KMIPN VII & KMIPN VIII) meliputi reverse engineering dan eksploitasi web.",
+      "en": "National competition security research and CTF writeup repository (1st Place KMIPN VII & VIII) covering web exploitation and reverse engineering."
+    },
+    "tags": ["CTF", "Reverse Engineering", "Web Security", "Python"],
+    "status": "completed",
+    "featured": true,
+    "role": "Security Researcher & CTF Player",
+    "highlights": [
+      "Juara 1 'Consistent Flag Seeker' pada KMIPN VIII di Politeknik Negeri Makassar (2026).",
+      "Juara 1 'Write-Up Documentation' pada KMIPN VII di Politeknik Negeri Padang (2025).",
+      "Analisis mendalam vulnerabilitas web dan reverse engineering binary."
+    ],
+    "links": {
+      "repo": "https://github.com/mathfha"
+    }
+  },
+  {
+    "slug": "recon-attack-surface-automation",
+    "title": {
+      "id": "Automated Recon & Security Assessment Suite",
+      "en": "Automated Recon & Security Assessment Suite"
+    },
+    "description": {
+      "id": "Kumpulan script otomatisasi reconnaissance jaringan, pemindaian port Nmap terdistribusi, dan audit perimeter keamanan aplikasi web.",
+      "en": "Automation suite for network reconnaissance, distributed Nmap port scanning, and web application perimeter assessment."
+    },
+    "tags": ["Recon", "Nmap", "Go", "Bash", "Penetration Testing"],
+    "status": "completed",
+    "featured": true,
+    "role": "Penetration Tester",
+    "highlights": [
+      "Otomatisasi pengintaian port dan deteksi service usang.",
+      "Pemetaan sub-domain dan analisis konfigurasi keamanan jaringan internal.",
+      "Format pelaporan temuan standar OWASP untuk pemangku kepentingan."
+    ],
+    "links": {
+      "repo": "https://github.com/mathfha"
+    }
+  }
+]

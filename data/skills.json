@@ -1,0 +1,33 @@
+[
+  {
+    "category": {
+      "id": "Keamanan Siber & Infrastruktur",
+      "en": "Cybersecurity & Infrastructure"
+    },
+    "skills": [
+      "Penetration Testing",
+      "Web Security (OWASP Top 10)",
+      "Linux Administration",
+      "Incident Response",
+      "System Hardening",
+      "Docker",
+      "Ansible",
+      "Nginx",
+      "Basic Reverse Engineering"
+    ]
+  },
+  {
+    "category": {
+      "id": "Bahasa Pemrograman & Framework",
+      "en": "Languages & Frameworks"
+    },
+    "skills": [
+      "Go-lang",
+      "Python",
+      "PHP",
+      "Laravel",
+      "AI Agent Engineering",
+      "Bash / Shell Scripting"
+    ]
+  }
+]

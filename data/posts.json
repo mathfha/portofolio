@@ -1,0 +1,14 @@
+[
+  {
+    "slug": "memecahkan-aes-ecb",
+    "aliases": ["aes-ecb", "post1"],
+    "title": "Memecahkan AES ECB → Blok demi Blok",
+    "date": "2026",
+    "category": "Kriptografi & Keamanan",
+    "author": "Aditya Rahman",
+    "readTime": "4 min read",
+    "tags": ["AES-128", "ECB", "Python", "Cryptography"],
+    "summary": "Analisis cara kerja Advanced Encryption Standard (AES) pada mode Electronic Codebook (ECB). Membedah mekanisme padding PKCS#7, potongan blok 16 byte, implementasi Python pycryptodome, dan alasan fatal bocornya pola ciphertext.",
+    "code": "from Crypto.Cipher import AES\nfrom Crypto.Random import get_random_bytes\nfrom Crypto.Util.Padding import pad, unpad\n\n# Kunci rahasia (16, 24, atau 32 byte untuk AES-128, AES-192, atau AES-256)\nkey = get_random_bytes(16)\n\n# Buat objek cipher AES ECB\ncipher = AES.new(key, AES.MODE_ECB)\n\n# Plaintext Anda (harus kelipatan 16 byte dalam mode ECB)\nplaintext = b'aditya rahman'\n\n# padding ke kelipatan 16 byte\npadded_plaintext = pad(plaintext, AES.block_size)\n\n# Enkripsi plaintext\nciphertext = cipher.encrypt(padded_plaintext)\n\n# Cetak ciphertext\nprint(\"Ciphertext:\", ciphertext)"
+  }
+]

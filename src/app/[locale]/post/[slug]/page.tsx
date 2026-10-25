@@ -52,9 +52,9 @@ export default function PostArticlePage({ params }: PostPageProps) {
           />
 
           {/* Virtual File Path Badge */}
-          <div className="hidden sm:flex items-center gap-2.5 px-4 py-1.5 rounded-sm bg-surface text-text-muted text-sm sm:text-base border border-white/10 font-medium">
-            <FileText className="w-5 h-5 text-accent" />
-            <span>notes/{post.slug}.md</span>
+          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-sm bg-surface border border-white/15 text-xs sm:text-sm font-medium">
+            <FileText className="w-4 h-4 text-accent shrink-0" />
+            <span className="text-text font-semibold font-mono">notes/{post.slug}.md</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -203,51 +203,13 @@ export default function PostArticlePage({ params }: PostPageProps) {
    [ EKSPLOITASI BERHASIL: Arbitrary Remote Code Execution (RCE) ]`}
                   </pre>
                 </div>
-
-                {/* Technical CVE Comparison Table */}
-                <div className="space-y-2 pt-2">
-                  <span className="text-text font-bold text-xs">Tabel Rincian CVE PHP2Shell:</span>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs font-mono">
-                      <thead>
-                        <tr className="border-b border-white/10 bg-base text-text">
-                          <th className="p-2.5 font-bold">Parameter</th>
-                          <th className="p-2.5 font-bold">CVE-2026-109618</th>
-                          <th className="p-2.5 font-bold">CVE-2026-109619</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/5 text-text-dim">
-                        <tr>
-                          <td className="p-2.5 text-text font-semibold">Skor Keparahan</td>
-                          <td className="p-2.5 text-accent font-bold">CVSS 4.0: 9.2 (Critical)</td>
-                          <td className="p-2.5 text-accent font-bold">CVSS 4.0: 9.2 (Critical)</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-text font-semibold">Mekanisme Celah</td>
-                          <td className="p-2.5">Uninitialized Request Memory pasca OOM longjmp</td>
-                          <td className="p-2.5">Dangling pointer memori global menunjuk heap bebas</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-text font-semibold">Dampak Eksploitasi</td>
-                          <td className="p-2.5">Remote Code Execution tanpa autentikasi</td>
-                          <td className="p-2.5">Kebocoran memori proses &amp; Eksekusi kode acak</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-text font-semibold">Komponen Terdampak</td>
-                          <td className="p-2.5">Zend Engine Memory Manager</td>
-                          <td className="p-2.5">Zend Engine Global Exception Handler</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
               </section>
 
               {/* Section 4: Langkah Mitigasi & Versi Patch */}
               <section className="space-y-4">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-accent" />
-                  <span>## Tindakan Mitigasi &amp; Rekomendasi Patch</span>
+                  <span>## Rekomendasi Mitigasi dan Patching</span>
                 </h2>
                 <p>
                   PHP sudah merilis versi resmi yang memperbaiki masalah ini: <strong className="text-text">8.2.35</strong>, <strong className="text-text">8.3.36</strong>, <strong className="text-text">8.4.27</strong>, dan <strong className="text-text">8.5.12</strong>. Pengelola server sebaiknya segera memeriksa versi PHP yang digunakan pada sistem dan memasang pembaruan yang sesuai.

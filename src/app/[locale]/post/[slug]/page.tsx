@@ -115,7 +115,7 @@ export default function PostArticlePage({ params }: PostPageProps) {
               {/* Section 1: Pengantar */}
               <section className="space-y-3">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
-                  ## 1. Apa Itu PHP2Shell?
+                  ## Apa Itu PHP2Shell?
                 </h2>
                 <p>
                   Beberapa hari terakhir, <strong className="text-text font-bold">PHP2Shell</strong> ramai dibicarakan di dunia keamanan siber internasional. Nama ini merujuk pada dua kerentanan kritis di PHP yang memungkinkan penyerang menjalankan kode dari jarak jauh (Remote Code Execution / RCE) pada server yang belum diperbarui.
@@ -129,7 +129,7 @@ export default function PostArticlePage({ params }: PostPageProps) {
               <section className="space-y-3">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
                   <Cpu className="w-5 h-5 text-accent" />
-                  <span>## 2. Ditemukan dengan Bantuan AI: Ryan Austin &amp; Tim Wiz</span>
+                  <span>## Ditemukan dengan Bantuan AI: Ryan Austin &amp; Tim Wiz</span>
                 </h2>
                 <p>
                   Hal yang membuat kasus ini menjadi tonggak sejarah baru dalam riset keamanan siber adalah keterlibatan kecerdasan buatan (AI) mutakhir dalam proses penemuannya:
@@ -151,7 +151,7 @@ export default function PostArticlePage({ params }: PostPageProps) {
                     Catatan Penting: Kolaborasi Manusia + AI
                   </span>
                   <p className="text-text-dim text-xs leading-relaxed">
-                    Ini bukan berarti AI menemukan semuanya secara otomatis tanpa campur tangan manusia. Peneliti tetap perlu memahami arsitektur kode secara mendalam, merumuskan hipotesis uji, menguji temuannya melalui Proof of Concept (PoC), dan membantu memastikan patch perbaikan bekerja tanpa merusak fungsionalitas lain. Namun, kasus PHP2Shell membuktikan bahwa AI dapat mengakselerasi pencarian celah keamanan yang sebelumnya sangat tersembunyi dan sulit dieksploitasi.
+                    Ini bukan berarti AI menemukan semuanya tanpa campur tangan manusia. Peneliti tetap perlu memahami kode, menguji temuannya, dan membantu memastikan perbaikan bekerja. Namun, kasus PHP2Shell menunjukkan bahwa AI dapat membantu mempercepat pencarian celah keamanan yang sebelumnya sulit ditemukan atau dieksploitasi.
                   </p>
                 </div>
               </section>
@@ -159,7 +159,7 @@ export default function PostArticlePage({ params }: PostPageProps) {
               {/* Section 3: Ilustrasi Alur Eksploitasi (Markdown Format) */}
               <section className="space-y-4">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
-                  ## 3. Ilustrasi Teknis Eksploitasi CVE (Markdown Flow)
+                  ## Ilustrasi Teknis Eksploitasi CVE
                 </h2>
                 <p>
                   Kerentanan ini berakar dari penanganan kondisi kehabisan memori (Out-Of-Memory / OOM) pada Zend Engine saat memanggil instruksi <code className="text-accent bg-base px-1.5 py-0.5 rounded-sm">longjmp()</code>:
@@ -206,7 +206,7 @@ export default function PostArticlePage({ params }: PostPageProps) {
 
                 {/* Technical CVE Comparison Table */}
                 <div className="space-y-2 pt-2">
-                  <span className="text-text font-bold text-xs">Tabel Rincian Cve PHP2Shell:</span>
+                  <span className="text-text font-bold text-xs">Tabel Rincian CVE PHP2Shell:</span>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse text-xs font-mono">
                       <thead>
@@ -243,62 +243,32 @@ export default function PostArticlePage({ params }: PostPageProps) {
                 </div>
               </section>
 
-              {/* Section 4: Kode Verifikasi Audit */}
-              <section className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-heading text-lg sm:text-xl font-bold text-text">
-                    ## 4. Script Audit Versi PHP Server
-                  </h2>
-                  <CopyCodeButton code={post.code} label="COPY AUDIT SCRIPT" />
-                </div>
-
-                <div className="rounded-sm bg-base border border-white/10 overflow-hidden text-xs">
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-surface-subtle border-b border-white/5 text-[11px] text-text-dim">
-                    <div className="flex items-center gap-2">
-                      <Terminal className="w-3.5 h-3.5 text-accent" />
-                      <span className="font-mono text-text">check_php2shell.sh</span>
-                    </div>
-                    <span>Bash / Shell Utility</span>
-                  </div>
-                  <pre className="p-4 sm:p-5 overflow-x-auto text-text leading-relaxed text-xs">
-                    <code>{post.code}</code>
-                  </pre>
-                </div>
-              </section>
-
-              {/* Section 5: Langkah Mitigasi & Versi Patch */}
+              {/* Section 4: Langkah Mitigasi & Versi Patch */}
               <section className="space-y-4">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-accent" />
-                  <span>## 5. Tindakan Mitigasi &amp; Daftar Versi Patch Resmi</span>
+                  <span>## Tindakan Mitigasi &amp; Rekomendasi Patch</span>
                 </h2>
                 <p>
-                  Tim pengembang PHP telah merilis versi rilis resmi yang memuat patch keamanan untuk mengatasi kerentanan ini. Pengelola server diwajibkan memeriksa versi yang terpasang dan memastikan versi minimal memenuhi kriteria berikut:
+                  PHP sudah merilis versi resmi yang memperbaiki masalah ini: <strong className="text-text">8.2.35</strong>, <strong className="text-text">8.3.36</strong>, <strong className="text-text">8.4.27</strong>, dan <strong className="text-text">8.5.12</strong>. Pengelola server sebaiknya segera memeriksa versi PHP yang digunakan pada sistem dan memasang pembaruan yang sesuai.
                 </p>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                  <div className="p-3 bg-base border border-white/10 rounded-sm space-y-1">
-                    <span className="text-[10px] text-text-dim block">Cabang 8.2</span>
-                    <span className="text-text font-bold text-sm text-accent">&gt;= 8.2.35</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center pt-1">
+                  <div className="p-3.5 bg-base border border-white/10 rounded-sm space-y-1">
+                    <span className="text-[11px] text-text font-bold block">PHP 8.2.x</span>
+                    <span className="text-accent font-mono text-xs font-bold block">&gt;= 8.2.35</span>
                   </div>
-                  <div className="p-3 bg-base border border-white/10 rounded-sm space-y-1">
-                    <span className="text-[10px] text-text-dim block">Cabang 8.3</span>
-                    <span className="text-text font-bold text-sm text-accent">&gt;= 8.3.36</span>
+                  <div className="p-3.5 bg-base border border-white/10 rounded-sm space-y-1">
+                    <span className="text-[11px] text-text font-bold block">PHP 8.3.x</span>
+                    <span className="text-accent font-mono text-xs font-bold block">&gt;= 8.3.36</span>
                   </div>
-                  <div className="p-3 bg-base border border-white/10 rounded-sm space-y-1">
-                    <span className="text-[10px] text-text-dim block">Cabang 8.4</span>
-                    <span className="text-text font-bold text-sm text-accent">&gt;= 8.4.27</span>
+                  <div className="p-3.5 bg-base border border-white/10 rounded-sm space-y-1">
+                    <span className="text-[11px] text-text font-bold block">PHP 8.4.x</span>
+                    <span className="text-accent font-mono text-xs font-bold block">&gt;= 8.4.27</span>
                   </div>
-                  <div className="p-3 bg-base border border-white/10 rounded-sm space-y-1">
-                    <span className="text-[10px] text-text-dim block">Cabang 8.5</span>
-                    <span className="text-text font-bold text-sm text-accent">&gt;= 8.5.12</span>
-                  </div>
-                </div>
-
-                <div className="space-y-2 pt-2">
-                  <span className="text-text font-bold text-xs">Perintah Cepat Update Server (Ubuntu / Debian):</span>
-                  <div className="p-3 bg-base border border-white/5 rounded-sm font-mono text-xs text-text select-all">
-                    <code>sudo apt update &amp;&amp; sudo apt --only-upgrade install php* &amp;&amp; sudo systemctl restart php*-fpm</code>
+                  <div className="p-3.5 bg-base border border-white/10 rounded-sm space-y-1">
+                    <span className="text-[11px] text-text font-bold block">PHP 8.5.x</span>
+                    <span className="text-accent font-mono text-xs font-bold block">&gt;= 8.5.12</span>
                   </div>
                 </div>
               </section>

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FileText, Terminal, AlertTriangle, ShieldCheck, Cpu } from "lucide-react";
 import { BackButton } from "@/components/ui/BackButton";
@@ -32,14 +33,20 @@ interface PostPageProps {
 
 export default function PostArticlePage({ params }: PostPageProps) {
   const { slug } = params;
-  const safeLocale = params.locale === "en" ? "en" : "id";
+  const safeLocale: "id" | "en" = params.locale === "en" ? "en" : "id";
   const post = POSTS.find((p) => p.slug === slug || p.aliases.includes(slug));
 
   if (!post) {
     notFound();
   }
 
-  const isPhp2Shell = post.slug === "php2shell-cve-2026-109618" || post.aliases.includes("php2shell");
+  const isPhp2Shell =
+    post.slug === "php2shell-cve-2026-109618" || post.aliases.includes("php2shell");
+
+  const postTitle = typeof post.title === "string" ? post.title : post.title[safeLocale];
+  const postCategory = typeof post.category === "string" ? post.category : post.category[safeLocale];
+  const postReadTime = typeof post.readTime === "string" ? post.readTime : post.readTime[safeLocale];
+  const postDate = typeof post.date === "string" ? post.date : post.date[safeLocale];
 
   return (
     <div className="min-h-screen bg-base text-text selection:bg-accent selection:text-base font-mono grain-overlay flex flex-col">
@@ -58,7 +65,18 @@ export default function PostArticlePage({ params }: PostPageProps) {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link
+              href={`/${safeLocale === "id" ? "en" : "id"}/post/${slug}`}
+              className="px-2.5 py-1 rounded bg-surface hover:bg-surface-subtle border border-white/10 text-xs font-mono font-bold transition-colors flex items-center gap-1.5"
+              title={safeLocale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
+            >
+              <span className={safeLocale === "id" ? "text-accent font-black" : "text-text-dim hover:text-text"}>ID</span>
+              <span className="text-text-dim">/</span>
+              <span className={safeLocale === "en" ? "text-accent font-black" : "text-text-dim hover:text-text"}>EN</span>
+            </Link>
+
             <MusicToggleButton
+              locale={safeLocale}
               className="p-2 text-text-muted hover:text-text transition-colors rounded-sm hover:bg-surface"
               iconClassName="w-5 h-5"
             />
@@ -73,26 +91,26 @@ export default function PostArticlePage({ params }: PostPageProps) {
           {/* YAML Frontmatter Preview */}
           <div className="p-4 rounded-sm bg-base border border-white/5 text-[11px] text-text-dim space-y-1 font-mono leading-relaxed select-all">
             <div className="text-text-muted font-bold">---</div>
-            <div>title: "{post.title}"</div>
-            <div>date: "{post.date}"</div>
-            <div>category: "{post.category}"</div>
+            <div>title: "{postTitle}"</div>
+            <div>date: "{postDate}"</div>
+            <div>category: "{postCategory}"</div>
             <div>author: "{post.author}"</div>
             <div>tags: [{post.tags.join(", ")}]</div>
-            <div>readTime: "{post.readTime}"</div>
+            <div>readTime: "{postReadTime}"</div>
             <div className="text-text-muted font-bold">---</div>
           </div>
 
           {/* Article Main Title */}
           <div className="space-y-3 border-b border-white/5 pb-6">
             <h1 className="font-heading text-2xl sm:text-4xl font-extrabold text-text tracking-tight leading-tight">
-              # {post.title}
+              # {postTitle}
             </h1>
             <div className="flex flex-wrap items-center gap-3 text-xs text-text-dim">
-              <span className="text-accent font-bold uppercase">{post.category}</span>
+              <span className="text-accent font-bold uppercase">{postCategory}</span>
               <span>·</span>
-              <span>Penulis: {post.author}</span>
+              <span>{safeLocale === "en" ? "Author" : "Penulis"}: {post.author}</span>
               <span>·</span>
-              <span>{post.readTime}</span>
+              <span>{postReadTime}</span>
             </div>
           </div>
 
@@ -108,61 +126,102 @@ export default function PostArticlePage({ params }: PostPageProps) {
                   <span>Security Advisory: Critical RCE in PHP Core Engine</span>
                 </div>
                 <p className="text-text-dim text-xs leading-relaxed">
-                  Dua kerentanan Remote Code Execution (RCE) tingkat kritis dengan skor CVSS 4.0: 9.2 baru saja diungkap pada runtime PHP. Eksploitasi tidak memerlukan autentikasi dan langsung menargetkan engine memori Zend.
+                  {safeLocale === "en"
+                    ? "Two critical Remote Code Execution (RCE) vulnerabilities with CVSS 4.0: 9.2 severity ratings have been disclosed in the PHP core runtime. Exploitation requires zero authentication and targets the internal Zend memory management engine."
+                    : "Dua kerentanan Remote Code Execution (RCE) tingkat kritis dengan skor CVSS 4.0: 9.2 baru saja diungkap pada runtime PHP. Eksploitasi tidak memerlukan autentikasi dan langsung menargetkan engine memori Zend."}
                 </p>
               </div>
 
-              {/* Section 1: Pengantar */}
+              {/* Section 1: Overview */}
               <section className="space-y-3">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
-                  ## Apa Itu PHP2Shell?
+                  {safeLocale === "en" ? "## What is PHP2Shell?" : "## Apa Itu PHP2Shell?"}
                 </h2>
-                <p>
-                  Beberapa hari terakhir, <strong className="text-text font-bold">PHP2Shell</strong> ramai dibicarakan di dunia keamanan siber internasional. Nama ini merujuk pada dua kerentanan kritis di PHP yang memungkinkan penyerang menjalankan kode dari jarak jauh (Remote Code Execution / RCE) pada server yang belum diperbarui.
-                </p>
-                <p>
-                  Berbeda dengan kerentanan umum pada plugin atau tema CMS (seperti WordPress atau Drupal), celah ini berada langsung di dalam core runtime engine PHP (Zend Engine). Artinya, meskipun aplikasi web ditulis tanpa celah SQL Injection atau File Upload, server tetap berisiko jika runtime PHP yang mendasarinya belum menerima patch resmi.
-                </p>
+                {safeLocale === "en" ? (
+                  <>
+                    <p>
+                      Over the past few days, <strong className="text-text font-bold">PHP2Shell</strong> has become a prominent topic in the global cybersecurity community. The name designates two critical vulnerabilities in PHP that enable unauthenticated remote threat actors to execute arbitrary code (Remote Code Execution / RCE) on unpatched host servers.
+                    </p>
+                    <p>
+                      Unlike commonplace flaws located inside CMS plugins or third-party themes (such as WordPress or Drupal extensions), this vulnerability exists directly within the core PHP runtime interpreter (the Zend Engine). Consequently, even if a web application possesses zero SQL Injection or File Upload bugs, the host machine remains exposed if the underlying PHP runtime has not received the security patch.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Beberapa hari terakhir, <strong className="text-text font-bold">PHP2Shell</strong> ramai dibicarakan di dunia keamanan siber internasional. Nama ini merujuk pada dua kerentanan kritis di PHP yang memungkinkan penyerang menjalankan kode dari jarak jauh (Remote Code Execution / RCE) pada server yang belum diperbarui.
+                    </p>
+                    <p>
+                      Berbeda dengan kerentanan umum pada plugin atau tema CMS (seperti WordPress atau Drupal), celah ini berada langsung di dalam core runtime engine PHP (Zend Engine). Artinya, meskipun aplikasi web ditulis tanpa celah SQL Injection atau File Upload, server tetap berisiko jika runtime PHP yang mendasarinya belum menerima patch resmi.
+                    </p>
+                  </>
+                )}
               </section>
 
-              {/* Section 2: Penemuan Berbasis AI */}
+              {/* Section 2: AI-Assisted Discovery */}
               <section className="space-y-3">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
                   <Cpu className="w-5 h-5 text-accent" />
-                  <span>## Ditemukan dengan Bantuan AI: Ryan Austin &amp; Tim Wiz</span>
+                  <span>
+                    {safeLocale === "en"
+                      ? "## Discovered with AI Assistance: Ryan Austin & Wiz Team"
+                      : "## Ditemukan dengan Bantuan AI: Ryan Austin & Tim Wiz"}
+                  </span>
                 </h2>
                 <p>
-                  Hal yang membuat kasus ini menjadi tonggak sejarah baru dalam riset keamanan siber adalah keterlibatan kecerdasan buatan (AI) mutakhir dalam proses penemuannya:
+                  {safeLocale === "en"
+                    ? "What makes this incident a landmark milestone in offensive and defensive security research is the active role played by frontier artificial intelligence:"
+                    : "Hal yang membuat kasus ini menjadi tonggak sejarah baru dalam riset keamanan siber adalah keterlibatan kecerdasan buatan (AI) mutakhir dalam proses penemuannya:"}
                 </p>
                 <div className="space-y-2 pl-3 border-l-2 border-accent/40">
-                  <p>
-                    <strong className="text-text font-semibold">Ryan Austin</strong>, peneliti keamanan dari Calif, menggunakan model frontier AI <strong className="text-text">GPT-5.6 Sol</strong> dalam proyek riset <em className="text-accent not-italic">Patch the Planet</em> untuk menyisir dan menganalisis kode sumber C berumur puluhan tahun pada repositori PHP, yang akhirnya mengarahkan pada salah satu celah memori tersebut.
-                  </p>
-                  <p>
-                    Secara independen, <strong className="text-text font-semibold">Tim Wiz</strong> juga berhasil menemukan dan melaporkan kedua kerentanan tersebut ke tim pengembang PHP.
-                  </p>
-                  <p>
-                    Setelah kedua temuan diverifikasi, para peneliti bekerja sama secara tertutup dengan tim inti PHP dalam skema <em>Coordinated Vulnerability Disclosure</em> guna menyiapkan perbaikan resmi sebelum rincian teknisnya dipublikasikan ke publik.
-                  </p>
+                  {safeLocale === "en" ? (
+                    <>
+                      <p>
+                        <strong className="text-text font-semibold">Ryan Austin</strong>, a security researcher at Calif, utilized the frontier AI model <strong className="text-text">GPT-5.6 Sol</strong> during the <em className="text-accent not-italic">Patch the Planet</em> initiative to audit and reason through legacy C source code across the PHP repository, ultimately discovering one of the memory corruption paths.
+                      </p>
+                      <p>
+                        Independently, the <strong className="text-text font-semibold">Wiz Research Team</strong> uncovered and responsibly reported both vulnerabilities to the upstream PHP maintainers.
+                      </p>
+                      <p>
+                        Following verified proof-of-concept submissions, the researchers worked closely with the PHP core team under a <em>Coordinated Vulnerability Disclosure</em> framework to deploy fixes before technical exploitation details went public.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        <strong className="text-text font-semibold">Ryan Austin</strong>, peneliti keamanan dari Calif, menggunakan model frontier AI <strong className="text-text">GPT-5.6 Sol</strong> dalam proyek riset <em className="text-accent not-italic">Patch the Planet</em> untuk menyisir dan menganalisis kode sumber C berumur puluhan tahun pada repositori PHP, yang akhirnya mengarahkan pada salah satu celah memori tersebut.
+                      </p>
+                      <p>
+                        Secara independen, <strong className="text-text font-semibold">Tim Wiz</strong> juga berhasil menemukan dan melaporkan kedua kerentanan tersebut ke tim pengembang PHP.
+                      </p>
+                      <p>
+                        Setelah kedua temuan diverifikasi, para peneliti bekerja sama secara tertutup dengan tim inti PHP dalam skema <em>Coordinated Vulnerability Disclosure</em> guna menyiapkan perbaikan resmi sebelum rincian teknisnya dipublikasikan ke publik.
+                      </p>
+                    </>
+                  )}
                 </div>
 
                 <div className="p-4 rounded-sm bg-base border border-white/5 space-y-2">
                   <span className="text-accent font-bold text-xs uppercase tracking-wider">
-                    Catatan Penting: Kolaborasi Manusia + AI
+                    {safeLocale === "en" ? "Key Note: Human + AI Synergy" : "Catatan Penting: Kolaborasi Manusia + AI"}
                   </span>
                   <p className="text-text-dim text-xs leading-relaxed">
-                    Ini bukan berarti AI menemukan semuanya tanpa campur tangan manusia. Peneliti tetap perlu memahami kode, menguji temuannya, dan membantu memastikan perbaikan bekerja. Namun, kasus PHP2Shell menunjukkan bahwa AI dapat membantu mempercepat pencarian celah keamanan yang sebelumnya sulit ditemukan atau dieksploitasi.
+                    {safeLocale === "en"
+                      ? "This does not imply that AI discovered the full chain in isolation. Skilled researchers still had to interpret the codebase, validate hypotheses, build reproducible triggers, and verify remediation patches. Nevertheless, PHP2Shell demonstrates that AI dramatically speeds up finding deeply buried flaws in foundational software."
+                      : "Ini bukan berarti AI menemukan semuanya tanpa campur tangan manusia. Peneliti tetap perlu memahami kode, menguji temuannya, dan membantu memastikan perbaikan bekerja. Namun, kasus PHP2Shell menunjukkan bahwa AI dapat membantu mempercepat pencarian celah keamanan yang sebelumnya sulit ditemukan atau dieksploitasi."}
                   </p>
                 </div>
               </section>
 
-              {/* Section 3: Ilustrasi Alur Eksploitasi (Markdown Format) */}
+              {/* Section 3: Technical Diagram */}
               <section className="space-y-4">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
-                  ## Ilustrasi Teknis Eksploitasi CVE
+                  {safeLocale === "en" ? "## Technical CVE Exploitation Flow" : "## Ilustrasi Teknis Eksploitasi CVE"}
                 </h2>
                 <p>
-                  Kerentanan ini berakar dari penanganan kondisi kehabisan memori (Out-Of-Memory / OOM) pada Zend Engine saat memanggil instruksi <code className="text-accent bg-base px-1.5 py-0.5 rounded-sm">longjmp()</code>:
+                  {safeLocale === "en"
+                    ? "The vulnerability is triggered during Out-Of-Memory (OOM) handling inside the Zend Engine when executing C `longjmp()` exception unwinding:"
+                    : "Kerentanan ini berakar dari penanganan kondisi kehabisan memori (Out-Of-Memory / OOM) pada Zend Engine saat memanggil instruksi longjmp():"}
                 </p>
 
                 {/* ASCII Diagram Box */}
@@ -172,7 +231,37 @@ export default function PostArticlePage({ params }: PostPageProps) {
                     <span>ASCII ARCHITECTURE MAP</span>
                   </div>
                   <pre className="p-4 sm:p-5 overflow-x-auto text-text leading-relaxed text-[11px] sm:text-xs">
-{`+-------------------------------------------------------------------------+
+{safeLocale === "en"
+? `+-------------------------------------------------------------------------+
+|                  PHP2Shell (RCE) Execution Attack Path                  |
++-------------------------------------------------------------------------+
+       [ Malicious HTTP Payload Delivered by Remote Attacker ]
+                            |
+                            v
+       [ Heap Allocation Exceeds Server memory_limit ]
+                            |
+                            v
+       [ Zend Engine Triggers Fatal Out-of-Memory (OOM) Condition ]
+                            |
+                            v
+       [ C longjmp() Routine Invoked to Abort Active Request ]
+                            |
+             +--------------+--------------+
+             |                             |
+             v                             v
+  [ CVE-2026-109618 ]            [ CVE-2026-109619 ]
+  Request-bound Memory           Dangling Global Pointer
+  Fails Clean State Reset        References Freed Heap Region
+  (Memory Safety Bypass)         (Use-After-Free / State Leak)
+             |                             |
+             +--------------+--------------+
+                            |
+                            v
+       [ Subsequent Request Cycle Reads Corrupted Heap State ]
+                            |
+                            v
+   [ EXPLOITATION SUCCESSFUL: Arbitrary Remote Code Execution (RCE) ]`
+: `+-------------------------------------------------------------------------+
 |                  PHP2Shell (RCE) Execution Attack Path                  |
 +-------------------------------------------------------------------------+
        [ Permintaan HTTP Berbahaya dari Penyerang ]
@@ -205,14 +294,16 @@ export default function PostArticlePage({ params }: PostPageProps) {
                 </div>
               </section>
 
-              {/* Section 4: Langkah Mitigasi & Versi Patch */}
+              {/* Section 4: Mitigations & Patched Versions */}
               <section className="space-y-4">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-accent" />
-                  <span>## Rekomendasi Mitigasi dan Patching</span>
+                  <span>{safeLocale === "en" ? "## Remediation & Patching Guidance" : "## Rekomendasi Mitigasi dan Patching"}</span>
                 </h2>
                 <p>
-                  PHP sudah merilis versi resmi yang memperbaiki masalah ini: <strong className="text-text">8.2.35</strong>, <strong className="text-text">8.3.36</strong>, <strong className="text-text">8.4.27</strong>, dan <strong className="text-text">8.5.12</strong>. Pengelola server sebaiknya segera memeriksa versi PHP yang digunakan pada sistem dan memasang pembaruan yang sesuai.
+                  {safeLocale === "en"
+                    ? "The PHP maintainers have shipped official patches resolving both flaws: 8.2.35, 8.3.36, 8.4.27, and 8.5.12. Server administrators should immediately audit running PHP binaries and upgrade accordingly:"
+                    : "PHP sudah merilis versi resmi yang memperbaiki masalah ini: 8.2.35, 8.3.36, 8.4.27, dan 8.5.12. Pengelola server sebaiknya segera memeriksa versi PHP yang digunakan pada sistem dan memasang pembaruan yang sesuai:"}
                 </p>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center pt-1">
@@ -240,58 +331,84 @@ export default function PostArticlePage({ params }: PostPageProps) {
                ARTICLE CONTENT: Memecahkan AES ECB (Fallback & Classic Post)
                ───────────────────────────────────────────────────────────── */
             <div className="space-y-8 text-xs sm:text-sm text-text-muted leading-relaxed">
-              {/* Section 1: Dasar Teori */}
+              {/* Section 1: Theory */}
               <section className="space-y-4">
                 <p>
-                  AES (Advanced Encryption Standard) adalah algoritma enkripsi simetris yang digunakan secara luas dan dapat beroperasi dalam berbagai mode. ECB (Electronic Codebook) adalah salah satu mode operasi paling sederhana untuk AES.
+                  {safeLocale === "en"
+                    ? "AES (Advanced Encryption Standard) is a symmetric block cipher widely employed in production systems. ECB (Electronic Codebook) is the most basic mode of operation for AES."
+                    : "AES (Advanced Encryption Standard) adalah algoritma enkripsi simetris yang digunakan secara luas dan dapat beroperasi dalam berbagai mode. ECB (Electronic Codebook) adalah salah satu mode operasi paling sederhana untuk AES."}
                 </p>
                 <p>
-                  Dalam mode ECB, setiap blok plaintext (teks asli) dienkripsi secara terpisah dengan kunci yang sama, dan <strong className="text-text">tidak ada mekanisme umpan balik (feedback mechanism)</strong> antar blok.
+                  {safeLocale === "en" ? (
+                    <>
+                      Under ECB mode, each plaintext block is encrypted in complete isolation using identical keying material, with <strong className="text-text">no feedback mechanism or chaining</strong> between adjacent blocks.
+                    </>
+                  ) : (
+                    <>
+                      Dalam mode ECB, setiap blok plaintext (teks asli) dienkripsi secara terpisah dengan kunci yang sama, dan <strong className="text-text">tidak ada mekanisme umpan balik (feedback mechanism)</strong> antar blok.
+                    </>
+                  )}
                 </p>
               </section>
 
-              {/* Section 2: Cara Kerja */}
+              {/* Section 2: Workflow */}
               <section className="space-y-4">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
-                  ## Alur Kerja Enkripsi AES ECB
+                  {safeLocale === "en" ? "## AES ECB Encryption Workflow" : "## Alur Kerja Enkripsi AES ECB"}
                 </h2>
 
                 <div className="space-y-3 pl-3 border-l-2 border-accent/40">
                   <div className="space-y-1">
-                    <span className="text-text font-bold">1. Pembangkitan Kunci (Key Generation):</span>
+                    <span className="text-text font-bold">
+                      {safeLocale === "en" ? "1. Key Generation:" : "1. Pembangkitan Kunci (Key Generation):"}
+                    </span>
                     <p>
-                      Memilih kunci enkripsi rahasia dengan panjang tetap (128, 192, atau 256 bit sesuai varian AES yang dipakai).
+                      {safeLocale === "en"
+                        ? "Select a secret symmetric key of fixed bit-length (128, 192, or 256 bits depending on security parameters)."
+                        : "Memilih kunci enkripsi rahasia dengan panjang tetap (128, 192, atau 256 bit sesuai varian AES yang dipakai)."}
                     </p>
                   </div>
 
                   <div className="space-y-1">
-                    <span className="text-text font-bold">2. Padding (Pengisian Byte):</span>
+                    <span className="text-text font-bold">
+                      {safeLocale === "en" ? "2. Padding (Byte Alignment):" : "2. Padding (Pengisian Byte):"}
+                    </span>
                     <p>
-                      Jika panjang plaintext bukan kelipatan ukuran blok AES (16 byte), dilakukan pengisian padding (standar PKCS#7) agar pas tepat kelipatan 16 byte.
+                      {safeLocale === "en"
+                        ? "If plaintext size is not an exact multiple of 16 bytes (the AES block standard), PKCS#7 padding is appended to align the final block."
+                        : "Jika panjang plaintext bukan kelipatan ukuran blok AES (16 byte), dilakukan pengisian padding (standar PKCS#7) agar pas tepat kelipatan 16 byte."}
                     </p>
                   </div>
 
                   <div className="space-y-1">
-                    <span className="text-text font-bold">3. Enkripsi Blok:</span>
+                    <span className="text-text font-bold">
+                      {safeLocale === "en" ? "3. Block-by-Block Encryption:" : "3. Enkripsi Blok:"}
+                    </span>
                     <p>
-                      Plaintext dibagi menjadi blok-blok tetap berukuran 16 byte. Setiap blok dienkripsi secara independen menggunakan algoritma AES dengan kunci yang sama, menghasilkan blok ciphertext.
+                      {safeLocale === "en"
+                        ? "The payload is separated into sequential 16-byte blocks. Each block undergoes AES transformation independently using the key."
+                        : "Plaintext dibagi menjadi blok-blok tetap berukuran 16 byte. Setiap blok dienkripsi secara independen menggunakan algoritma AES dengan kunci yang sama, menghasilkan blok ciphertext."}
                     </p>
                   </div>
 
                   <div className="space-y-1">
-                    <span className="text-text font-bold">4. Penggabungan (Concatenation):</span>
+                    <span className="text-text font-bold">
+                      {safeLocale === "en" ? "4. Concatenation:" : "4. Penggabungan (Concatenation):"}
+                    </span>
                     <p>
-                      Seluruh blok ciphertext yang dihasilkan digabungkan berurutan untuk membentuk ciphertext akhir utuh.
+                      {safeLocale === "en"
+                        ? "All encrypted blocks are concatenated in order to assemble the final ciphertext output."
+                        : "Seluruh blok ciphertext yang dihasilkan digabungkan berurutan untuk membentuk ciphertext akhir utuh."}
                     </p>
                   </div>
                 </div>
               </section>
 
-              {/* Section 3: Kode Python */}
+              {/* Section 3: Python Implementation */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="font-heading text-lg sm:text-xl font-bold text-text">
-                    ## Implementasi Python (`pycryptodome`)
+                    {safeLocale === "en" ? "## Python Implementation (`pycryptodome`)" : "## Implementasi Python (`pycryptodome`)"}
                   </h2>
                   <CopyCodeButton code={post.code} label="COPY CODE" />
                 </div>
@@ -310,89 +427,97 @@ export default function PostArticlePage({ params }: PostPageProps) {
                 </div>
               </section>
 
-              {/* Section 4: Logika Dasar & Analogi */}
+              {/* Section 4: Deep Dive & Real-World Analogy */}
               <section className="space-y-5">
                 <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
-                  ## Logika Enkripsi &amp; Analogi Nyata
+                  {safeLocale === "en" ? "## Cryptographic Principles & Analogies" : "## Logika Enkripsi & Analogi Nyata"}
                 </h2>
 
                 <div className="space-y-4">
                   <div className="p-5 rounded-sm bg-base border border-white/5 space-y-2">
                     <div className="text-accent font-bold text-sm">
-                      1. Symmetric Key (Satu Kunci untuk Semua)
+                      {safeLocale === "en" ? "1. Symmetric Keying" : "1. Symmetric Key (Satu Kunci untuk Semua)"}
                     </div>
                     <p className="leading-relaxed">
-                      <strong className="text-text">Konsep:</strong> Kunci untuk mengunci (enkripsi) dan membuka kembali (dekripsi) adalah kunci yang sama persis.
+                      <strong className="text-text">{safeLocale === "en" ? "Principle:" : "Konsep:"}</strong>{" "}
+                      {safeLocale === "en"
+                        ? "The exact same secret key is used both to encrypt and subsequently decrypt the data."
+                        : "Kunci untuk mengunci (enkripsi) dan membuka kembali (dekripsi) adalah kunci yang sama persis."}
                     </p>
                     <div className="p-3 rounded-sm bg-surface-subtle border-l-2 border-accent text-xs text-text-dim">
-                      <strong className="text-text">Analogi:</strong> Seperti kunci pintu rumah. Kunci fisik yang dipakai untuk mengunci pintu dari luar dipakai juga untuk membukanya kembali dari dalam. Kunci ini mutlak harus dijaga agar tidak dicuri atau bocor ke pihak lain.
+                      <strong className="text-text">{safeLocale === "en" ? "Analogy:" : "Analogi:"}</strong>{" "}
+                      {safeLocale === "en"
+                        ? "Like a physical front-door lock. The physical key used to lock the deadbolt from the exterior is the identical key needed to unlock it from the interior."
+                        : "Seperti kunci pintu rumah. Kunci fisik yang dipakai untuk mengunci pintu dari luar dipakai juga untuk membukanya kembali dari dalam. Kunci ini mutlak harus dijaga agar tidak dicuri atau bocor ke pihak lain."}
                     </div>
                   </div>
 
                   <div className="p-5 rounded-sm bg-base border border-white/5 space-y-2">
                     <div className="text-accent font-bold text-sm">
-                      2. Block Cipher (Potong-Potong Data)
+                      {safeLocale === "en" ? "2. Block Cipher Geometry" : "2. Block Cipher (Potong-Potong Data)"}
                     </div>
                     <p className="leading-relaxed">
-                      <strong className="text-text">Konsep:</strong> Data yang panjang tidak diproses sekaligus dalam satu tarikan nafas, melainkan dipotong-potong menjadi kotak-kotak kecil berukuran tetap (blok).
+                      <strong className="text-text">{safeLocale === "en" ? "Principle:" : "Konsep:"}</strong>{" "}
+                      {safeLocale === "en"
+                        ? "Long messages are partitioned into standardized, fixed-size blocks rather than processed as a continuous stream."
+                        : "Data yang panjang tidak diproses sekaligus dalam satu tarikan nafas, melainkan dipotong-potong menjadi kotak-kotak kecil berukuran tetap (blok)."}
                     </p>
                     <div className="p-3 rounded-sm bg-surface-subtle border-l-2 border-accent text-xs text-text-dim space-y-1">
-                      <p><strong className="text-text">Aturan Emas AES:</strong> Ukuran potongan (blok) selalu 16 byte (tetap, tidak bisa ditawar).</p>
-                      <p>Angka 128, 192, atau 256 adalah ukuran kunci (kompleksitas keamanan kunci), bukan ukuran potongan datanya.</p>
+                      <p>
+                        <strong className="text-text">{safeLocale === "en" ? "AES Rule:" : "Aturan Emas AES:"}</strong>{" "}
+                        {safeLocale === "en" ? "Block size is permanently 16 bytes (128 bits)." : "Ukuran potongan (blok) selalu 16 byte (tetap, tidak bisa ditawar)."}
+                      </p>
+                      <p>
+                        {safeLocale === "en"
+                          ? "Key sizes (128, 192, 256 bits) define security strength, not block dimensions."
+                          : "Angka 128, 192, atau 256 adalah ukuran kunci (kompleksitas keamanan kunci), bukan ukuran potongan datanya."}
+                      </p>
                     </div>
                   </div>
 
                   <div className="p-5 rounded-sm bg-base border border-white/5 space-y-2">
                     <div className="text-accent font-bold text-sm">
-                      3. Mode Operasi: ECB (Si Polos) vs CBC (Si Rantai)
+                      {safeLocale === "en" ? "3. Operating Modes: ECB vs CBC" : "3. Mode Operasi: ECB (Si Polos) vs CBC (Si Rantai)"}
                     </div>
                     <p className="leading-relaxed">
-                      Mode operasi ibarat cara kita menyusun dan mengacak potongan-potongan tadi:
+                      {safeLocale === "en"
+                        ? "Modes dictate how adjacent blocks interact during transformation:"
+                        : "Mode operasi ibarat cara kita menyusun dan mengacak potongan-potongan tadi:"}
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-xs">
                       <div className="p-3.5 rounded-sm bg-surface-subtle space-y-1.5 border border-border/40">
-                        <span className="text-text font-bold">ECB (Electronic Codebook) - Si Polos</span>
+                        <span className="text-text font-bold">
+                          {safeLocale === "en" ? "ECB (Electronic Codebook)" : "ECB (Electronic Codebook) - Si Polos"}
+                        </span>
                         <p className="text-text-dim leading-relaxed text-[11px]">
-                          Setiap potongan diacak sendiri-sendiri tanpa peduli temannya.
+                          {safeLocale === "en"
+                            ? "Each block is encrypted completely independently."
+                            : "Setiap potongan diacak sendiri-sendiri tanpa peduli temannya."}
                         </p>
                         <p className="text-text-muted leading-relaxed text-[11px]">
-                          <strong className="text-text font-bold">Kelemahan Fatal:</strong> Kalau ada dua potongan isinya sama (misal: "AAAA"), hasil acakannya juga pasti identik. Pola data masih terbaca jelas (seperti fenomena ECB Penguin). Tidak aman untuk data terstruktur.
+                          <strong className="text-text font-bold">{safeLocale === "en" ? "Vulnerability:" : "Kelemahan Fatal:"}</strong>{" "}
+                          {safeLocale === "en"
+                            ? "Identical plaintext blocks produce identical ciphertext blocks (e.g., the infamous ECB Penguin). Unsafe for structured or bitmap payloads."
+                            : "Kalau ada dua potongan isinya sama (misal: 'AAAA'), hasil acakannya juga pasti identik. Pola data masih terbaca jelas (seperti fenomena ECB Penguin). Tidak aman untuk data terstruktur."}
                         </p>
                       </div>
 
                       <div className="p-3.5 rounded-sm bg-surface-subtle space-y-1.5 border border-border/40">
-                        <span className="text-text font-bold">CBC (Cipher Block Chaining) - Si Rantai</span>
+                        <span className="text-text font-bold">
+                          {safeLocale === "en" ? "CBC (Cipher Block Chaining)" : "CBC (Cipher Block Chaining) - Si Rantai"}
+                        </span>
                         <p className="text-text-dim leading-relaxed text-[11px]">
-                          Saling menyambung. Hasil acakan potongan pertama dipakai untuk mengacak potongan kedua, dan seterusnya.
+                          {safeLocale === "en"
+                            ? "Blocks are chained using XOR operations before each AES round."
+                            : "Saling menyambung. Hasil acakan potongan pertama dipakai untuk mengacak potongan kedua, dan seterusnya."}
                         </p>
                         <p className="text-text-muted leading-relaxed text-[11px]">
-                          <strong className="text-text font-bold">Kelebihan:</strong> Walaupun ada potongan yang isinya sama ("AAAA"), hasil akhirnya akan beda total karena efek berantai ini. Jauh lebih aman.
+                          <strong className="text-text font-bold">{safeLocale === "en" ? "Advantage:" : "Kelebihan:"}</strong>{" "}
+                          {safeLocale === "en"
+                            ? "Even repeated plaintext blocks yield radically distinct ciphertext, eradicating patterns completely."
+                            : "Walaupun ada potongan yang isinya sama ('AAAA'), hasil akhirnya akan beda total karena efek berantai ini. Jauh lebih aman."}
                         </p>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="p-5 rounded-sm bg-base border border-white/5 space-y-2">
-                    <div className="text-accent font-bold text-sm">
-                      4. IV (Initialization Vector) - Bumbu Awal
-                    </div>
-                    <p className="leading-relaxed">
-                      <strong className="text-text">Konsep:</strong> Karena CBC bekerja secara berantai, potongan pertama butuh "lawan main" untuk memulai rantai (karena belum ada potongan sebelumnya).
-                    </p>
-                    <p className="text-text-dim leading-relaxed text-xs">
-                      <strong className="text-text">Fungsi:</strong> Angka acak (random) yang ditambahkan di awal supaya hasil enkripsi selalu unik, meskipun pesan yang dienkripsi dan kuncinya sama persis.
-                    </p>
-                  </div>
-
-                  <div className="p-5 rounded-sm bg-base border border-white/5 space-y-2">
-                    <div className="text-accent font-bold text-sm">
-                      5. Logika Enkripsi (Bukan Matematika Biasa)
-                    </div>
-                    <p className="leading-relaxed">
-                      <strong className="text-text">Konsep:</strong> Enkripsi modern bukan sekadar operasi aritmatika linier seperti 1 + 1 = 2.
-                    </p>
-                    <div className="p-3 rounded-sm bg-surface-subtle border-l-2 border-accent text-xs text-text-dim">
-                      <strong className="text-text">Analogi Blender:</strong> Bayangkan sebuah blender. Plaintext (buah) dimasukkan, ditambah Key (pisau blender), lalu diputar berkali-kali (ronde substitusi &amp; permutasi) sampai hancur lebur menjadi Jus (Ciphertext). Mustahil membalikkan jus kembali menjadi buah utuh tanpa kunci dan algoritma pembalik yang tepat.
                     </div>
                   </div>
                 </div>

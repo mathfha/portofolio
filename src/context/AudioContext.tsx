@@ -10,6 +10,7 @@ interface AudioContextState {
   toggleMusic: () => void;
   beatScale: number;
   visualizerData: number[];
+  locale: "id" | "en";
 }
 
 const AudioContext = createContext<AudioContextState>({
@@ -17,6 +18,7 @@ const AudioContext = createContext<AudioContextState>({
   toggleMusic: () => {},
   beatScale: 1,
   visualizerData: new Array(16).fill(16),
+  locale: "id",
 });
 
 export function useAudio() {
@@ -25,13 +27,20 @@ export function useAudio() {
 
 export function AudioProvider({
   children,
-  locale = "id",
+  locale: propLocale,
 }: {
   children: React.ReactNode;
   locale?: "id" | "en";
 }) {
   const pathname = usePathname();
-  const isHome = pathname === "/" || pathname === `/${locale}` || pathname === `/${locale}/`;
+  const isEn = pathname?.startsWith("/en");
+  const effectiveLocale: "id" | "en" = propLocale || (isEn ? "en" : "id");
+  const isHome =
+    pathname === "/" ||
+    pathname === "/id" ||
+    pathname === "/en" ||
+    pathname === "/id/" ||
+    pathname === "/en/";
 
   // Only run intro if initially landing on home page
   const [isIntroVisible, setIsIntroVisible] = useState(isHome);
@@ -44,9 +53,12 @@ export function AudioProvider({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(Date.now());
+  const isMutedRef = useRef<boolean>(false);
+  const unlockCleanupRef = useRef<(() => void) | null>(null);
 
   // Direct native audio player helper (no suspended WebAudio graph lock)
   const playAudio = () => {
+    if (isMutedRef.current) return;
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 1.0;
@@ -56,6 +68,11 @@ export function AudioProvider({
       .then(() => {
         setIsPlaying(true);
         setAutoplayBlocked(false);
+        // Autoplay succeeded; cleanup gesture unlock listeners
+        if (unlockCleanupRef.current) {
+          unlockCleanupRef.current();
+          unlockCleanupRef.current = null;
+        }
       })
       .catch(() => {
         // Mobile browser policy blocked sound until first user gesture
@@ -66,6 +83,11 @@ export function AudioProvider({
   // Mount effect: attempt auto-play immediately and register gesture unlock
   useEffect(() => {
     try {
+      const savedMute = sessionStorage.getItem("portfolio_audio_muted");
+      if (savedMute === "true") {
+        isMutedRef.current = true;
+        setIsPlaying(false);
+      }
       const hasSeenIntro = sessionStorage.getItem("portfolio_intro_seen");
       if (hasSeenIntro === "true" && isIntroVisible) {
         setIsIntroVisible(false);
@@ -73,18 +95,27 @@ export function AudioProvider({
     } catch {}
 
     startTimeRef.current = Date.now();
-    playAudio();
+    if (!isMutedRef.current) {
+      playAudio();
+    }
 
     const audio = audioRef.current;
     if (audio) {
       audio.onplay = () => {
-        setIsPlaying(true);
-        setAutoplayBlocked(false);
+        if (!isMutedRef.current) {
+          setIsPlaying(true);
+          setAutoplayBlocked(false);
+        }
       };
-      audio.onpause = () => setIsPlaying(false);
+      audio.onpause = () => {
+        setIsPlaying(false);
+      };
     }
 
     const unlockAudio = () => {
+      // If user intentionally muted, NEVER auto-resume!
+      if (isMutedRef.current) return;
+
       const el = audioRef.current;
       if (el && el.paused) {
         el.volume = 1.0;
@@ -94,10 +125,25 @@ export function AudioProvider({
           .then(() => {
             setIsPlaying(true);
             setAutoplayBlocked(false);
+            if (unlockCleanupRef.current) {
+              unlockCleanupRef.current();
+              unlockCleanupRef.current = null;
+            }
           })
           .catch(() => {});
       }
     };
+
+    const cleanup = () => {
+      window.removeEventListener("click", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+      window.removeEventListener("touchend", unlockAudio);
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("scroll", unlockAudio);
+    };
+
+    unlockCleanupRef.current = cleanup;
 
     window.addEventListener("click", unlockAudio, { passive: true });
     window.addEventListener("touchstart", unlockAudio, { passive: true });
@@ -107,12 +153,7 @@ export function AudioProvider({
     window.addEventListener("scroll", unlockAudio, { passive: true });
 
     return () => {
-      window.removeEventListener("click", unlockAudio);
-      window.removeEventListener("touchstart", unlockAudio);
-      window.removeEventListener("touchend", unlockAudio);
-      window.removeEventListener("pointerdown", unlockAudio);
-      window.removeEventListener("keydown", unlockAudio);
-      window.removeEventListener("scroll", unlockAudio);
+      cleanup();
     };
   }, []);
 
@@ -166,14 +207,36 @@ export function AudioProvider({
   }, [isIntroVisible]);
 
   const toggleMusic = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying || !audio.paused) {
+      // User explicitly mutes
+      isMutedRef.current = true;
+      try {
+        sessionStorage.setItem("portfolio_audio_muted", "true");
+      } catch {}
+      audio.muted = true;
+      audio.pause();
       setIsPlaying(false);
+      if (unlockCleanupRef.current) {
+        unlockCleanupRef.current();
+        unlockCleanupRef.current = null;
+      }
     } else {
-      audioRef.current
+      // User explicitly unmutes
+      isMutedRef.current = false;
+      try {
+        sessionStorage.setItem("portfolio_audio_muted", "false");
+      } catch {}
+      audio.muted = false;
+      audio.volume = 1.0;
+      audio
         .play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          setIsPlaying(true);
+          setAutoplayBlocked(false);
+        })
         .catch(() => {});
     }
   };
@@ -185,6 +248,7 @@ export function AudioProvider({
         toggleMusic,
         beatScale,
         visualizerData,
+        locale: effectiveLocale,
       }}
     >
       {/* Global Persistent Audio Element with native autoPlay */}
@@ -260,7 +324,7 @@ export function AudioProvider({
                 {/* Subtle Mobile Gesture Hint (only shown if mobile browser blocked audio) */}
                 {!isPlaying && autoplayBlocked && (
                   <div className="text-[11px] text-text-dim tracking-widest uppercase animate-pulse pt-1">
-                    {locale === "en" ? "[ tap for sound ]" : "[ sentuh layar untuk suara ]"}
+                    {effectiveLocale === "en" ? "[ tap for sound ]" : "[ sentuh layar untuk suara ]"}
                   </div>
                 )}
               </div>
@@ -298,19 +362,30 @@ export function AudioProvider({
 export function MusicToggleButton({
   className = "p-1.5 text-text-muted hover:text-text transition-colors",
   iconClassName = "w-4 h-4",
+  locale,
 }: {
   className?: string;
   iconClassName?: string;
+  locale?: "id" | "en";
 }) {
-  const { isPlaying, toggleMusic } = useAudio();
+  const { isPlaying, toggleMusic, locale: ctxLocale } = useAudio();
+  const effectiveLocale = locale || ctxLocale || "id";
+
+  const titleText = isPlaying
+    ? (effectiveLocale === "en" ? "Mute Music" : "Matikan Musik")
+    : (effectiveLocale === "en" ? "Play Music" : "Nyalakan Musik");
 
   return (
     <button
       type="button"
-      onClick={toggleMusic}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMusic();
+      }}
       className={className}
-      title={isPlaying ? "Matikan Musik" : "Nyalakan Musik"}
-      aria-label={isPlaying ? "Matikan Musik" : "Nyalakan Musik"}
+      title={titleText}
+      aria-label={titleText}
     >
       {isPlaying ? (
         <Volume2 className={`${iconClassName} text-text`} />

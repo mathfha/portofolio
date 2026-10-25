@@ -2,25 +2,55 @@
   {
     "slug": "php2shell-cve-2026-109618",
     "aliases": ["php2shell", "cve-2026-109618", "post2"],
-    "title": "PHP2Shell: Mengupas 2 Kerentanan Kritis RCE PHP yang Ditemukan via AI",
-    "date": "Okt 2026",
-    "category": "Web Security & Vulnerability Research",
+    "title": {
+      "id": "PHP2Shell: Mengupas 2 Kerentanan Kritis RCE PHP yang Ditemukan via AI",
+      "en": "PHP2Shell: Dissecting 2 Critical PHP RCE Flaws Discovered via AI"
+    },
+    "date": {
+      "id": "Okt 2026",
+      "en": "Oct 2026"
+    },
+    "category": {
+      "id": "Riset Keamanan & Celah Sistem",
+      "en": "Security Research & Vulnerability"
+    },
     "author": "Aditya Rahman",
-    "readTime": "5 min read",
+    "readTime": {
+      "id": "5 min baca",
+      "en": "5 min read"
+    },
     "tags": ["PHP2Shell", "RCE", "CVE-2026-109618", "CVE-2026-109619", "AI Security", "Zend Engine"],
-    "summary": "Beberapa hari terakhir, PHP2Shell ramai dibicarakan di dunia keamanan siber. Nama ini merujuk pada dua kerentanan kritis di PHP yang memungkinkan penyerang menjalankan kode dari jarak jauh (RCE) pada server yang belum diperbarui. Menariknya, celah ini ditemukan dengan bantuan AI (GPT-5.6 Sol) oleh Ryan Austin & Tim Wiz.",
+    "summary": {
+      "id": "Beberapa hari terakhir, PHP2Shell ramai dibicarakan di dunia keamanan siber. Nama ini merujuk pada dua kerentanan kritis di PHP yang memungkinkan penyerang menjalankan kode dari jarak jauh (RCE) pada server yang belum diperbarui. Menariknya, celah ini ditemukan dengan bantuan AI (GPT-5.6 Sol) oleh Ryan Austin & Tim Wiz.",
+      "en": "Over the past few days, PHP2Shell has become a major talking point in cybersecurity. The name refers to two critical PHP vulnerabilities enabling remote code execution (RCE) on unpatched servers. Intriguingly, these flaws were discovered with AI assistance (GPT-5.6 Sol) by Ryan Austin and Wiz Research."
+    },
     "code": ""
   },
   {
     "slug": "memecahkan-aes-ecb",
     "aliases": ["aes-ecb", "post1"],
-    "title": "Memecahkan AES ECB → Blok demi Blok",
-    "date": "2026",
-    "category": "Kriptografi & Keamanan",
+    "title": {
+      "id": "Memecahkan AES ECB → Blok demi Blok",
+      "en": "Breaking AES ECB → Block by Block"
+    },
+    "date": {
+      "id": "2026",
+      "en": "2026"
+    },
+    "category": {
+      "id": "Kriptografi & Keamanan",
+      "en": "Cryptography & Security"
+    },
     "author": "Aditya Rahman",
-    "readTime": "4 min read",
+    "readTime": {
+      "id": "4 min baca",
+      "en": "4 min read"
+    },
     "tags": ["AES-128", "ECB", "Python", "Cryptography"],
-    "summary": "Analisis cara kerja Advanced Encryption Standard (AES) pada mode Electronic Codebook (ECB). Membedah mekanisme padding PKCS#7, potongan blok 16 byte, implementasi Python pycryptodome, dan alasan fatal bocornya pola ciphertext.",
+    "summary": {
+      "id": "Analisis cara kerja Advanced Encryption Standard (AES) pada mode Electronic Codebook (ECB). Membedah mekanisme padding PKCS#7, potongan blok 16 byte, implementasi Python pycryptodome, dan alasan fatal bocornya pola ciphertext.",
+      "en": "Analysis of the Advanced Encryption Standard (AES) in Electronic Codebook (ECB) mode. Dissecting PKCS#7 padding, 16-byte block division, Python pycryptodome implementation, and why ciphertext pattern leaks occur."
+    },
     "code": "from Crypto.Cipher import AES\nfrom Crypto.Random import get_random_bytes\nfrom Crypto.Util.Padding import pad, unpad\n\n# Kunci rahasia (16, 24, atau 32 byte untuk AES-128, AES-192, atau AES-256)\nkey = get_random_bytes(16)\n\n# Buat objek cipher AES ECB\ncipher = AES.new(key, AES.MODE_ECB)\n\n# Plaintext Anda (harus kelipatan 16 byte dalam mode ECB)\nplaintext = b'aditya rahman'\n\n# padding ke kelipatan 16 byte\npadded_plaintext = pad(plaintext, AES.block_size)\n\n# Enkripsi plaintext\nciphertext = cipher.encrypt(padded_plaintext)\n\n# Cetak ciphertext\nprint(\"Ciphertext:\", ciphertext)"
   }
 ]

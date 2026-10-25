@@ -1,6 +1,7 @@
 import React from "react";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
+import { AudioProvider } from "@/context/AudioContext";
 
 export const metadata: Metadata = {
   title: "Aditya Rahman - Security Engineer & Systems Portfolio",
@@ -36,7 +37,9 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-base text-text min-h-screen font-mono selection:bg-accent selection:text-base grain-overlay flex flex-col">
-        {children}
+        <AudioProvider>
+          {children}
+        </AudioProvider>
       </body>
     </html>
   );

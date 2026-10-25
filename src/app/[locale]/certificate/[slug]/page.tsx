@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackButton } from "@/components/ui/BackButton";
 import { MusicToggleButton } from "@/context/AudioContext";
@@ -45,13 +46,25 @@ export default function CertificateDetailPage({
           label={safeLocale === "en" ? "Back" : "Kembali"}
         />
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2.5 text-text-muted text-sm sm:text-base font-semibold">
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2.5 text-text-muted text-xs sm:text-sm font-semibold">
             <span className="text-text font-bold uppercase tracking-wider">{cert.category}</span>
             <span>-</span>
             <span>{cert.date}</span>
           </div>
+
+          <Link
+            href={`/${safeLocale === "id" ? "en" : "id"}/certificate/${slug}`}
+            className="px-2.5 py-1 rounded bg-surface hover:bg-surface-subtle border border-white/10 text-xs font-mono font-bold transition-colors flex items-center gap-1.5"
+            title={safeLocale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
+          >
+            <span className={safeLocale === "id" ? "text-accent font-black" : "text-text-dim hover:text-text"}>ID</span>
+            <span className="text-text-dim">/</span>
+            <span className={safeLocale === "en" ? "text-accent font-black" : "text-text-dim hover:text-text"}>EN</span>
+          </Link>
+
           <MusicToggleButton
+            locale={safeLocale}
             className="p-1.5 text-text-muted hover:text-text transition-colors rounded-sm hover:bg-surface"
             iconClassName="w-5 h-5"
           />

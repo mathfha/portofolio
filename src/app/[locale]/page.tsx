@@ -159,18 +159,13 @@ export default function StructuredBentoPortfolioPage({
     };
   }, []);
 
-  useEffect(() => {
-    try {
-      const hasManualChoice = sessionStorage.getItem("manual_lang_switch");
-      if (!hasManualChoice && typeof navigator !== "undefined") {
-        const navLang = navigator.language?.toLowerCase() || "";
-        const systemLocale = navLang.startsWith("en") ? "en" : "id";
-        if (systemLocale !== locale) {
-          window.location.replace(`/${systemLocale}`);
-        }
-      }
-    } catch {}
-  }, [locale]);
+  const navItems = [
+    { id: "about", label: locale === "id" ? "Tentang" : "About" },
+    { id: "skill", label: locale === "id" ? "Keahlian" : "Skills" },
+    { id: "experience", label: locale === "id" ? "Pengalaman" : "Experience" },
+    { id: "certificate", label: locale === "id" ? "Sertifikat" : "Certificates" },
+    { id: "post", label: locale === "id" ? "Artikel" : "Posts" },
+  ];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -200,17 +195,17 @@ export default function StructuredBentoPortfolioPage({
       <header className="w-full px-4 sm:px-8 lg:px-12 py-3 sm:py-5 flex items-center justify-end gap-3 text-xs font-mono shrink-0 z-30">
         <Link
           href={`/${locale === "id" ? "en" : "id"}`}
-          onClick={() => {
-            try { sessionStorage.setItem("manual_lang_switch", "true"); } catch {}
-          }}
-          className="px-2 py-1 rounded bg-surface hover:bg-surface-subtle text-text-muted hover:text-text transition-colors text-[11px] font-bold tracking-wider"
+          className="px-2.5 py-1 rounded bg-surface hover:bg-surface-subtle border border-white/10 text-xs font-mono font-bold transition-colors flex items-center gap-1.5"
           title={locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
         >
-          {locale === "id" ? "EN" : "ID"}
+          <span className={locale === "id" ? "text-accent font-black" : "text-text-dim hover:text-text"}>ID</span>
+          <span className="text-text-dim">/</span>
+          <span className={locale === "en" ? "text-accent font-black" : "text-text-dim hover:text-text"}>EN</span>
         </Link>
 
         <MusicToggleButton
-          className="p-1.5 text-text-muted hover:text-text transition-colors"
+          locale={locale}
+          className="p-1.5 text-text-muted hover:text-text transition-colors rounded-sm hover:bg-surface"
           iconClassName="w-4 h-4"
         />
 
@@ -318,13 +313,7 @@ export default function StructuredBentoPortfolioPage({
                 aria-label="Navigasi Bagian Cepat"
                 className="lg:hidden sticky top-0 z-20 flex items-center justify-between gap-1 overflow-x-auto py-3 px-3 bg-base/95 backdrop-blur-md font-mono text-sm sm:text-base no-scrollbar w-full shadow-sm border-b border-white/5"
               >
-                {[
-                  { id: "about", label: "About" },
-                  { id: "skill", label: "Skill" },
-                  { id: "experience", label: "Experience" },
-                  { id: "certificate", label: "Certificate" },
-                  { id: "post", label: "Post" },
-                ].map((item) => (
+                {navItems.map((item) => (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
@@ -343,7 +332,7 @@ export default function StructuredBentoPortfolioPage({
               {/* ── CARD 1: ABOUT (Borderless & Prominent Title) ── */}
               <div id="about" className="scroll-mt-6 p-5 sm:p-7 sm:p-9 rounded-sm bg-surface hover:bg-surface-subtle transition-colors space-y-4 shadow-sm">
                 <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
-                  ABOUT
+                  {locale === "id" ? "TENTANG" : "ABOUT"}
                 </h2>
 
                 <p className="text-xs sm:text-sm text-text-muted leading-relaxed font-mono">
@@ -356,13 +345,13 @@ export default function StructuredBentoPortfolioPage({
               {/* ── CARD 2: SKILL (Borderless & Prominent Title) ── */}
               <div id="skill" className="scroll-mt-6 p-5 sm:p-7 sm:p-9 rounded-sm bg-surface hover:bg-surface-subtle transition-colors space-y-6 shadow-sm">
                 <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
-                  SKILL
+                  {locale === "id" ? "KEAHLIAN" : "SKILLS"}
                 </h2>
 
                 {/* Tools & Infrastructure (Draggable & Auto-scrolling) */}
                 <div className="space-y-3">
                   <div className="font-mono text-[11px] text-text-dim uppercase tracking-wider">
-                    TOOLS &amp; SYSTEM SECURITY
+                    {locale === "id" ? "ALAT & KEAMANAN SISTEM" : "TOOLS & SYSTEM SECURITY"}
                   </div>
                   <DraggableMarquee speed={0.65} direction="left">
                     {[...TOOLS_LIST, ...TOOLS_LIST].map((item, idx) => (
@@ -383,7 +372,7 @@ export default function StructuredBentoPortfolioPage({
                 {/* Languages & Frameworks (Draggable & Auto-scrolling) */}
                 <div className="space-y-3">
                   <div className="font-mono text-[11px] text-text-dim uppercase tracking-wider">
-                    LANGUAGES &amp; FRAMEWORKS
+                    {locale === "id" ? "BAHASA & KERANGKA KERJA" : "LANGUAGES & FRAMEWORKS"}
                   </div>
                   <DraggableMarquee speed={0.6} direction="left">
                     {[...LANGS_LIST, ...LANGS_LIST, ...LANGS_LIST].map((item, idx) => (
@@ -405,7 +394,7 @@ export default function StructuredBentoPortfolioPage({
               {/* ── CARD 3: EXPERIENCE (Borderless & Prominent Title) ── */}
               <div id="experience" className="scroll-mt-6 p-5 sm:p-7 sm:p-9 rounded-sm bg-surface hover:bg-surface-subtle transition-colors space-y-5 shadow-sm">
                 <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
-                  EXPERIENCE
+                  {locale === "id" ? "PENGALAMAN" : "EXPERIENCE"}
                 </h2>
 
                 <div className="space-y-4 font-mono text-xs pt-1">
@@ -413,7 +402,9 @@ export default function StructuredBentoPortfolioPage({
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-text font-bold text-sm">
                       <span>PT Inovasi Informatik Sinergi</span>
-                      <span className="text-text-dim text-xs font-normal">Jul 2026 - Oct 2026</span>
+                      <span className="text-text-dim text-xs font-normal">
+                        {locale === "id" ? "Jul 2026 - Okt 2026" : "Jul 2026 - Oct 2026"}
+                      </span>
                     </div>
                     <div className="text-text font-semibold">Security Engineer</div>
                     <p className="font-mono text-text-muted text-xs leading-relaxed pt-0.5">
@@ -427,7 +418,9 @@ export default function StructuredBentoPortfolioPage({
                   <div className="space-y-1 pt-1">
                     <div className="flex items-center justify-between text-text font-bold text-sm">
                       <span>Pentester.ID</span>
-                      <span className="text-text-dim text-xs font-normal">Dec 2021 - Sep 2023</span>
+                      <span className="text-text-dim text-xs font-normal">
+                        {locale === "id" ? "Des 2021 - Sep 2023" : "Dec 2021 - Sep 2023"}
+                      </span>
                     </div>
                     <div className="text-text font-semibold">Penetration Tester Intern</div>
                     <p className="font-mono text-text-muted text-xs leading-relaxed pt-0.5">
@@ -442,7 +435,7 @@ export default function StructuredBentoPortfolioPage({
               {/* ── CARD 4: CERTIFICATE (Borderless & Prominent Title) ── */}
               <div id="certificate" className="scroll-mt-6 p-5 sm:p-7 sm:p-9 rounded-sm bg-surface hover:bg-surface-subtle transition-colors space-y-5 shadow-sm">
                 <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
-                  CERTIFICATE
+                  {locale === "id" ? "SERTIFIKAT" : "CERTIFICATES"}
                 </h2>
 
                 {/* Draggable & Auto-scrolling Certificate Stream */}
@@ -486,46 +479,55 @@ export default function StructuredBentoPortfolioPage({
               <div id="post" className="scroll-mt-6 p-5 sm:p-7 sm:p-9 rounded-sm bg-surface hover:bg-surface-subtle transition-colors space-y-5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <h2 className="font-mono text-lg sm:text-xl font-black tracking-widest text-text uppercase">
-                    POST
+                    {locale === "id" ? "ARTIKEL" : "POSTS"}
                   </h2>
-                  <span className="font-mono text-xs text-text-dim">{POSTS.length} Articles</span>
+                  <span className="font-mono text-xs text-text-dim">
+                    {POSTS.length} {locale === "id" ? "Artikel" : "Articles"}
+                  </span>
                 </div>
 
                 {/* Draggable & Auto-scrolling Post Stream (Smooth Horizontal Marquee) */}
                 <DraggableMarquee speed={0.5} direction="left">
-                  {POSTS.concat(POSTS).map((post, idx) => (
-                    <Link
-                      key={`${post.slug}-${idx}`}
-                      href={`/${locale}/post/${post.slug}`}
-                      className="group flex flex-col justify-between text-left bg-base/80 hover:bg-base p-4 sm:p-5 rounded-sm transition-all w-80 sm:w-96 min-h-[210px] shrink-0 cursor-pointer select-none shadow-sm border border-transparent hover:border-white/10"
-                    >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between font-mono text-[10px] text-text-dim">
-                          <span className="text-text font-bold uppercase tracking-wider truncate max-w-[200px]">
-                            {post.category}
+                  {POSTS.concat(POSTS).map((post, idx) => {
+                    const postTitle = typeof post.title === "string" ? post.title : post.title[locale];
+                    const postCategory = typeof post.category === "string" ? post.category : post.category[locale];
+                    const postSummary = typeof post.summary === "string" ? post.summary : post.summary[locale];
+                    const postReadTime = typeof post.readTime === "string" ? post.readTime : post.readTime[locale];
+
+                    return (
+                      <Link
+                        key={`${post.slug}-${idx}`}
+                        href={`/${locale}/post/${post.slug}`}
+                        className="group flex flex-col justify-between text-left bg-base/80 hover:bg-base p-4 sm:p-5 rounded-sm transition-all w-80 sm:w-96 min-h-[210px] shrink-0 cursor-pointer select-none shadow-sm border border-transparent hover:border-white/10"
+                      >
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between font-mono text-[10px] text-text-dim">
+                            <span className="text-text font-bold uppercase tracking-wider truncate max-w-[200px]">
+                              {postCategory}
+                            </span>
+                            <span className="text-[10px] shrink-0">{postReadTime}</span>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <h3 className="font-heading text-sm sm:text-base font-bold text-text group-hover:text-accent transition-colors flex items-center justify-between gap-2 leading-snug">
+                              <span className="line-clamp-2">{postTitle}</span>
+                              <ArrowUpRight className="w-4 h-4 text-text-dim group-hover:text-accent shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </h3>
+                            <p className="text-[11px] sm:text-xs text-text-muted font-mono leading-relaxed line-clamp-3">
+                              {postSummary}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-3 font-mono text-xs text-text border-t border-white/5 mt-3">
+                          <span className="group-hover:underline font-bold text-[11px]">
+                            {locale === "id" ? "Baca Selengkapnya" : "Read Full Post"}
                           </span>
-                          <span className="text-[10px] shrink-0">{post.readTime}</span>
+                          <span className="transition-transform group-hover:translate-x-1">→</span>
                         </div>
-
-                        <div className="space-y-1.5">
-                          <h3 className="font-heading text-sm sm:text-base font-bold text-text group-hover:text-accent transition-colors flex items-center justify-between gap-2 leading-snug">
-                            <span className="line-clamp-2">{post.title}</span>
-                            <ArrowUpRight className="w-4 h-4 text-text-dim group-hover:text-accent shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                          </h3>
-                          <p className="text-[11px] sm:text-xs text-text-muted font-mono leading-relaxed line-clamp-3">
-                            {post.summary}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 pt-3 font-mono text-xs text-text border-t border-white/5 mt-3">
-                        <span className="group-hover:underline font-bold text-[11px]">
-                          {locale === "id" ? "Baca Selengkapnya" : "Read Full Post"}
-                        </span>
-                        <span className="transition-transform group-hover:translate-x-1">→</span>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    );
+                  })}
                 </DraggableMarquee>
               </div>
             </section>
@@ -535,13 +537,7 @@ export default function StructuredBentoPortfolioPage({
               aria-label="Navigasi Halaman Desktop"
               className="hidden lg:flex flex-col gap-5 sticky top-6 font-mono text-base xl:text-lg select-none shrink-0 w-44 pt-2"
             >
-              {[
-                { id: "about", label: "About" },
-                { id: "skill", label: "Skill" },
-                { id: "experience", label: "Experience" },
-                { id: "certificate", label: "Certificate" },
-                { id: "post", label: "Post" },
-              ].map((item) => (
+              {navItems.map((item) => (
                 <a
                   key={item.id}
                   href={`#${item.id}`}
@@ -599,7 +595,7 @@ export default function StructuredBentoPortfolioPage({
                 type="button"
                 onClick={() => setSelectedCert(null)}
                 className="p-1 text-text-muted hover:text-text transition-colors"
-                aria-label="Tutup"
+                aria-label={locale === "id" ? "Tutup" : "Close"}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -621,7 +617,7 @@ export default function StructuredBentoPortfolioPage({
                   onClick={() => setSelectedCert(null)}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-sm bg-accent text-base font-bold hover:bg-accent-hover transition-colors text-xs"
                 >
-                  <span>Detail Sertifikat</span>
+                  <span>{locale === "id" ? "Detail Sertifikat" : "Certificate Details"}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

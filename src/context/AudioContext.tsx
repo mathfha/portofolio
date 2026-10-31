@@ -25,7 +25,7 @@ export function useAudio() {
   return useContext(AudioContext);
 }
 
-const DEFAULT_AUDIO_VOLUME = 0.25; // 25% comfortable ambient volume (down from 1.0)
+const DEFAULT_AUDIO_VOLUME = 0.06; // 6% soft ambient background level (lowered from 0.25)
 
 export function AudioProvider({
   children,
@@ -262,6 +262,12 @@ export function AudioProvider({
         preload="auto"
         loop
         playsInline
+        onPlay={(e) => {
+          e.currentTarget.volume = DEFAULT_AUDIO_VOLUME;
+        }}
+        onLoadedMetadata={(e) => {
+          e.currentTarget.volume = DEFAULT_AUDIO_VOLUME;
+        }}
       />
 
       {/* ─────────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FileText, Terminal, AlertTriangle, ShieldCheck, Cpu } from "lucide-react";
+import { FileText, Terminal, AlertTriangle, ShieldCheck, Cpu, Binary, ExternalLink } from "lucide-react";
 import { BackButton } from "@/components/ui/BackButton";
 import { MusicToggleButton } from "@/context/AudioContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -42,6 +42,12 @@ export default function PostArticlePage({ params }: PostPageProps) {
 
   const isPhp2Shell =
     post.slug === "php2shell-cve-2026-109618" || post.aliases.includes("php2shell");
+  const isAiRust =
+    post.slug === "ai-reverse-engineering-rust" ||
+    post.aliases.includes("rea-rust") ||
+    post.aliases.includes("artcraft-rust") ||
+    post.aliases.includes("ai-rust") ||
+    post.aliases.includes("post3");
 
   const postTitle = typeof post.title === "string" ? post.title : post.title[safeLocale];
   const postCategory = typeof post.category === "string" ? post.category : post.category[safeLocale];
@@ -114,7 +120,304 @@ export default function PostArticlePage({ params }: PostPageProps) {
             </div>
           </div>
 
-          {isPhp2Shell ? (
+          {isAiRust ? (
+            /* ─────────────────────────────────────────────────────────────
+               ARTICLE CONTENT: AI, Reverse Engineering, and Rust
+               ───────────────────────────────────────────────────────────── */
+            <div className="space-y-8 text-xs sm:text-sm text-text-muted leading-relaxed">
+              {/* Alert Callout */}
+              <div className="p-4 rounded-sm bg-base border-l-4 border-accent space-y-2">
+                <div className="flex items-center gap-2 text-text font-bold text-xs sm:text-sm uppercase tracking-wider">
+                  <Binary className="w-4 h-4 text-accent" />
+                  <span>
+                    {safeLocale === "en"
+                      ? "Architecture & Security Brief: AI Reversing & Memory Safety"
+                      : "Ringkasan Arsitektur & Keamanan: Analisis Biner AI & Keamanan Memori"}
+                  </span>
+                </div>
+                <p className="text-text-dim text-xs leading-relaxed">
+                  {safeLocale === "en"
+                    ? "Evaluating how coding agents interact with disassembly toolchains, where automated decompilation reaches its limits, and why Rust's compile-time memory model provides a reliable destination for ported systems."
+                    : "Membahas bagaimana coding agent memanfaatkan alat dekompilasi dan disassembly, batasan analisis biner otomatis, serta alasan model kompilasi Rust menjadi target ideal untuk software performa tinggi."}
+                </p>
+              </div>
+
+              {/* Section 1: AI & Coding Agents */}
+              <section className="space-y-3">
+                <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
+                  {safeLocale === "en"
+                    ? "## Beyond Autocomplete: The Agentic Loop"
+                    : "## Dari Autocomplete ke Siklus Otonom"}
+                </h2>
+                {safeLocale === "en" ? (
+                  <>
+                    <p>
+                      AI is shifting how software gets engineered. Modern coding agents no longer just suggest lines or functions inside an editor. They execute shell commands, parse compiler diagnostics, inspect runtime failures, and iterate until a feature satisfies its test constraints.
+                    </p>
+                    <p>
+                      This closed-loop feedback shifts developer effort away from writing repetitive boilerplate and toward architectural evaluation, threat modeling, and correctness validation.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      AI mengubah cara software dibangun. Alih-alih sebatas melengkapi baris kode (autocomplete) di editor, coding agent kini mampu menjalankan perintah CLI, menginterpretasikan error compiler, memeriksa kegagalan runtime, dan mengulang siklus perbaikan hingga implementasi lolos pengujian.
+                    </p>
+                    <p>
+                      Pergeseran ke siklus tertutup ini mengalihkan fokus pengembang dari pengetikan boilerplate repetitif ke arah peninjauan arsitektur, pemodelan ancaman, dan pembuktian kebenaran logika sistem.
+                    </p>
+                  </>
+                )}
+              </section>
+
+              {/* Section 2: REA and Binary Analysis */}
+              <section className="space-y-3">
+                <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
+                  <Terminal className="w-5 h-5 text-accent" />
+                  <span>
+                    {safeLocale === "en"
+                      ? "## REA: Bridging Agents to Binary Analysis"
+                      : "## REA: Menghubungkan Agent dengan Analisis Biner"}
+                  </span>
+                </h2>
+                {safeLocale === "en" ? (
+                  <>
+                    <p>
+                      Tools like <strong className="text-text font-bold">REA</strong> (<em>Reverse Engineer Anything</em>) connect coding agents directly to binary analysis engines. An agent can inspect disassembled routines, trace call graphs, examine strings, and reconstruct compatible reimplementations for another runtime.
+                    </p>
+                    <p>
+                      However, REA’s documentation clearly defines its technical boundary: the toolkit does not magically dump original source code or synthesize identical duplicates. It provides observability into compiled artifacts.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Toolkit seperti <strong className="text-text font-bold">REA</strong> (<em>Reverse Engineer Anything</em>) menjembatani coding agent dengan peralatan analisis biner. Agent dapat menelusuri rutin hasil disassembly, membaca call graph, memeriksa string dan simbol, lalu merekonstruksi logika yang kompatibel pada basis kode lain.
+                    </p>
+                    <p>
+                      Kendati demikian, dokumentasi resmi REA secara eksplisit menegaskan batasannya: alat ini bukan dekompiler instan yang mengambil source code asli atau mencetak replika sempurna. REA berfungsi memberikan bukti dan observabilitas terhadap artefak biner.
+                    </p>
+                  </>
+                )}
+
+                <div className="p-4 rounded-sm bg-base border border-white/5 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-accent font-bold text-xs uppercase tracking-wider">
+                      {safeLocale === "en" ? "Source Reference" : "Referensi Resmi"}
+                    </span>
+                    <a
+                      href="https://github.com/morluto/rea"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent transition-colors inline-flex items-center gap-1 font-mono text-xs"
+                    >
+                      <span>github.com/morluto/rea</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                  <p className="text-text-dim text-xs leading-relaxed">
+                    {safeLocale === "en"
+                      ? "Observable behavior does not equal complete understanding. Confirming what an isolated subroutine produces does not reveal every environmental condition, edge-case boundary, or concurrency hazard embedded in the original system."
+                      : "Mengetahui perilaku output suatu fungsi biner tidak serta-merta mencakup penanganan kasus ekstrem (edge cases), asumsi lingkungan runtime, serta race condition tersembunyi di balik sistem aslinya."}
+                  </p>
+                </div>
+              </section>
+
+              {/* Section 3: Architecture Diagram */}
+              <section className="space-y-4">
+                <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
+                  {safeLocale === "en"
+                    ? "## Technical Flow: From Binary to Verified Rust"
+                    : "## Alur Teknis: Dari Biner ke Implementasi Rust"}
+                </h2>
+                <p>
+                  {safeLocale === "en"
+                    ? "How automated reverse engineering pairs with compiler-driven verification:"
+                    : "Bagaimana proses analisis biner berbantuan agent berpadu dengan verifikasi compiler:"}
+                </p>
+
+                <div className="rounded-sm bg-base border border-white/10 overflow-hidden text-xs">
+                  <div className="flex items-center justify-between px-4 py-2 bg-surface-subtle border-b border-white/5 text-[11px] text-text-dim">
+                    <span className="font-mono text-text">rea_agent_rust_pipeline.md</span>
+                    <span>ARCHITECTURE FLOW</span>
+                  </div>
+                  <pre className="p-4 sm:p-5 overflow-x-auto text-text leading-relaxed text-[11px] sm:text-xs">
+{safeLocale === "en"
+? `+-------------------------------------------------------------------------+
+|        AI Agent Assisted Binary Analysis & Rust Reconstruction Flow     |
++-------------------------------------------------------------------------+
+   [ Target Compiled Executable / Legacy Binary ]
+                         |
+                         v
+   [ REA Analysis Tools (Static Disassembly, Strings, Symbol Maps) ]
+                         |
+                         v
+   [ Coding Agent Identifies Function Contracts & Observable State ]
+                         |
+                         v
+   [ Draft Rust Module Implementation (Idiomatic Types & Traits) ]
+                         |
+                         v
+   [ rustc Compiler Verification (Borrow Checker & Lifetime Audit) ]
+                         |
+                         v
+   [ Verified Native Rust Implementation (Zero-Cost Abstractions) ]`
+: `+-------------------------------------------------------------------------+
+|     Alur Analisis Biner Berbantuan AI Agent & Rekonstruksi ke Rust      |
++-------------------------------------------------------------------------+
+   [ Biner Terkompilasi / Aplikasi Legacy ]
+                         |
+                         v
+   [ Toolkit Analisis REA (Disassembly Statis, Strings, Simbol, dsb.) ]
+                         |
+                         v
+   [ Coding Agent Mengidentifikasi Kontrak Fungsi & Alur State ]
+                         |
+                         v
+   [ Draf Implementasi Modul Rust (Tipe Data & Trait Idiomatis) ]
+                         |
+                         v
+   [ Verifikasi Compiler rustc (Pemeriksaan Borrow Checker & Lifetimes) ]
+                         |
+                         v
+   [ Implementasi Native Rust Terverifikasi (Aman & Performa Tinggi) ]`}
+                  </pre>
+                </div>
+              </section>
+
+              {/* Section 4: Why Rust */}
+              <section className="space-y-4">
+                <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-accent" />
+                  <span>
+                    {safeLocale === "en"
+                      ? "## Why Rust Serves as the Ideal Target"
+                      : "## Alasan Rust Menjadi Target Pilihan"}
+                  </span>
+                </h2>
+                <p>
+                  {safeLocale === "en"
+                    ? "Rust delivers native C/C++ performance without a garbage collector while preventing memory safety bugs through its strict ownership model and compile-time borrow checker."
+                    : "Rust menawarkan kecepatan eksekusi setara C/C++ tanpa jeda garbage collector, sekaligus mengeliminasi kerentanan memori lewat sistem kepemilikan (ownership) dan borrow checker saat kompilasi."}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="p-4 rounded-sm bg-base border border-white/10 space-y-1.5">
+                    <span className="text-accent font-bold font-mono text-xs block">
+                      {safeLocale === "en" ? "01. Compile-Time Safety" : "01. Keamanan Saat Kompilasi"}
+                    </span>
+                    <p className="text-text-dim text-[11px] leading-relaxed">
+                      {safeLocale === "en"
+                        ? "Buffer overflows, use-after-free, and data races fail to compile, removing runtime vulnerability classes."
+                        : "Kesalahan use-after-free, buffer overflow, dan data race digagalkan langsung oleh rustc sebelum kode sempat dieksekusi."}
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-sm bg-base border border-white/10 space-y-1.5">
+                    <span className="text-accent font-bold font-mono text-xs block">
+                      {safeLocale === "en" ? "02. Lowering Adoption Friction" : "02. Menurunkan Hambatan Adopsi"}
+                    </span>
+                    <p className="text-text-dim text-[11px] leading-relaxed">
+                      {safeLocale === "en"
+                        ? "AI agents parse verbose compiler errors and help developers navigate borrow checker rules quickly."
+                        : "Agent membantu membedah error compiler yang kompleks dan memandu penyesuaian lifetime tanpa frustrasi."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-4 pt-1 font-mono text-xs">
+                  <a
+                    href="https://rust-lang.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>rust-lang.org</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <a
+                    href="https://www.reversinglabs.com/blog/ai-coding-rust"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>ReversingLabs: AI & Rust Migration</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </section>
+
+              {/* Section 5: ArtCraft Project Context */}
+              <section className="space-y-3">
+                <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2 flex items-center gap-2">
+                  <Cpu className="w-5 h-5 text-accent" />
+                  <span>
+                    {safeLocale === "en"
+                      ? "## Case Context: ArtCraft as Independent Rust Software"
+                      : "## Konteks Kasus: ArtCraft sebagai Software Rust Mandiri"}
+                  </span>
+                </h2>
+                {safeLocale === "en" ? (
+                  <>
+                    <p>
+                      <strong className="text-text font-bold">ArtCraft</strong> develops open-source native desktop applications in Rust across image manipulation, vector illustration, video processing, documents, and spreadsheets. Their documentation indicates these applications were built from the ground up.
+                    </p>
+                    <p>
+                      Operating in identical product categories does not mean replicating commercial source code. There is also zero public verification linking ArtCraft to REA toolchains. ArtCraft serves as an independent demonstration that Rust’s ecosystem is mature enough to support full-scale desktop productivity suites.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <strong className="text-text font-bold">ArtCraft</strong> mengembangkan aplikasi desktop open-source berbasis Rust untuk pengolahan gambar, ilustrasi vektor, video, dokumen, hingga spreadsheet. Dokumentasi resminya menyatakan bahwa aplikasi tersebut dirancang mandiri dari nol sebagai software native.
+                    </p>
+                    <p>
+                      Berada di kategori produktivitas yang sama tidak berarti menyalin kode produk komersial. Data publik ArtCraft juga tidak mengonfirmasi keterkaitan dengan REA. ArtCraft adalah bukti nyata bahwa ekosistem Rust kini sudah matang untuk membangun rangkaian software desktop performa tinggi secara mandiri.
+                    </p>
+                  </>
+                )}
+
+                <div className="pt-1">
+                  <a
+                    href="https://getartcraft.com/apps"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent transition-colors inline-flex items-center gap-1 font-mono text-xs"
+                  >
+                    <span>getartcraft.com/apps</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </section>
+
+              {/* Section 6: Rigor & Long-Term Reliability */}
+              <section className="space-y-4">
+                <h2 className="font-heading text-lg sm:text-xl font-bold text-text border-b border-white/5 pb-2">
+                  {safeLocale === "en"
+                    ? "## Speed vs Precision: Engineering Maturity"
+                    : "## Kecepatan vs Presisi: Kematangan Rekayasa"}
+                </h2>
+                {safeLocale === "en" ? (
+                  <>
+                    <p>
+                      AI substantially accelerates exploratory analysis and initial scaffolding. However, spinning up an initial proof-of-concept remains fundamentally different from maintaining production software. File format compatibility, error handling, security hardening, and interface latency still require deliberate human engineering.
+                    </p>
+                    <p>
+                      The true benefit is leverage: small teams can now evaluate technical architectures that previously required larger engineering groups. AI handles boilerplate exploration, while Rust provides strict compile-time guarantees. The deciding factor remains software reliability in production.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      AI memangkas waktu analisis awal dan penyusunan prototipe secara drastis. Kendati demikian, menghasilkan versi awal yang berjalan berbeda jauh dengan merawat software produksi yang stabil. Kompatibilitas format file, penanganan eror, audit keamanan, dan responsivitas UI tetap membutuhkan ketelitian manusia.
+                    </p>
+                    <p>
+                      Keuntungan terbesarnya adalah efisiensi: tim kecil kini dapat menguji arsitektur ambisius yang dulu butuh tim besar. AI mengurus eksplorasi kode berulang, sedangkan Rust memberi jaminan memori di level compiler. Nilai akhir sebuah software tetap dinilai dari keandalannya saat bekerja di tangan pengguna.
+                    </p>
+                  </>
+                )}
+              </section>
+            </div>
+          ) : isPhp2Shell ? (
             /* ─────────────────────────────────────────────────────────────
                ARTICLE CONTENT: PHP2Shell (CVE-2026-109618 & CVE-2026-109619)
                ───────────────────────────────────────────────────────────── */

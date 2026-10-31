@@ -1,5 +1,32 @@
 [
   {
+    "slug": "ai-reverse-engineering-rust",
+    "aliases": ["rea-rust", "artcraft-rust", "ai-rust", "post3"],
+    "title": {
+      "id": "AI, Reverse Engineering, dan Alasan Rust Makin Dilirik",
+      "en": "AI, Reverse Engineering, and Why Rust Is Gaining Ground"
+    },
+    "date": {
+      "id": "Okt 2026",
+      "en": "Oct 2026"
+    },
+    "category": {
+      "id": "Rekayasa Sistem & Keamanan",
+      "en": "Systems Engineering & Security"
+    },
+    "author": "Aditya Rahman",
+    "readTime": {
+      "id": "4 min baca",
+      "en": "4 min read"
+    },
+    "tags": ["AI", "Reverse Engineering", "Rust", "REA", "Systems Programming"],
+    "summary": {
+      "id": "Bagaimana coding agent dan toolkit analisis biner REA mempercepat audit perangkat lunak, alasan model memori Rust dipilih untuk software native tanpa runtime GC, dan realitas membangun aplikasi desktop yang andal.",
+      "en": "How coding agents and binary analysis toolkits like REA accelerate software audits, why Rust's memory model is selected for native desktop tools without a GC, and the realities of building reliable software."
+    },
+    "code": ""
+  },
+  {
     "slug": "php2shell-cve-2026-109618",
     "aliases": ["php2shell", "cve-2026-109618", "post2"],
     "title": {

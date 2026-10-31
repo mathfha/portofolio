@@ -4,11 +4,18 @@ import type { Metadata } from "next";
 import { AudioProvider } from "@/context/AudioContext";
 
 export const metadata: Metadata = {
-  title: "Aditya Rahman - Security Engineer & Systems Portfolio",
+  title: "adit",
   description:
     "Portofolio pribadi Aditya Rahman: Web Security, System Hardening, Linux Administration, and Penetration Testing.",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png" },
+    ],
   },
 };
 

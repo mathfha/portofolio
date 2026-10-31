@@ -25,6 +25,8 @@ export function useAudio() {
   return useContext(AudioContext);
 }
 
+const DEFAULT_AUDIO_VOLUME = 0.25; // 25% comfortable ambient volume (down from 1.0)
+
 export function AudioProvider({
   children,
   locale: propLocale,
@@ -61,7 +63,7 @@ export function AudioProvider({
     if (isMutedRef.current) return;
     const audio = audioRef.current;
     if (!audio) return;
-    audio.volume = 1.0;
+    audio.volume = DEFAULT_AUDIO_VOLUME;
     audio.muted = false;
     audio
       .play()
@@ -101,6 +103,7 @@ export function AudioProvider({
 
     const audio = audioRef.current;
     if (audio) {
+      audio.volume = DEFAULT_AUDIO_VOLUME;
       audio.onplay = () => {
         if (!isMutedRef.current) {
           setIsPlaying(true);
@@ -118,7 +121,7 @@ export function AudioProvider({
 
       const el = audioRef.current;
       if (el && el.paused) {
-        el.volume = 1.0;
+        el.volume = DEFAULT_AUDIO_VOLUME;
         el.muted = false;
         el
           .play()
@@ -230,7 +233,7 @@ export function AudioProvider({
         sessionStorage.setItem("portfolio_audio_muted", "false");
       } catch {}
       audio.muted = false;
-      audio.volume = 1.0;
+      audio.volume = DEFAULT_AUDIO_VOLUME;
       audio
         .play()
         .then(() => {
